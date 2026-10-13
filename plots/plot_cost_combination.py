@@ -32,7 +32,7 @@ USAGE:
 
 The CSV must live at results/<CSV_NAME>.csv and contain, at minimum,
 the columns generated in TASK 1:
-    Pen_PV, Cost_BESS_Peru, Cost_BESS_Intl, Energy_Losses_USD
+    Pen_PV, Cost_BESS_Local, Cost_BESS_Intl, Energy_Losses_USD
 
 Data is grouped by Pen_PV and the MEDIAN of each metric is taken
 across the Monte Carlo iterations of that level (same criterion used
@@ -118,7 +118,7 @@ DPI = 300
 # EDITABLE CONFIGURATION (same pattern as CSV_NAME in plot_curves.py)
 # ============================================================
 CSV_NAME = "resultados_18Bus_Mod_PV100_BESS25_EV50_DC0"   # CSV name in results/, no extension
-COSTO    = "Peru"                                        # "Peru" or "Intl" - BESS cost band
+COSTO    = "Local"                                       # "Local" or "Intl" - BESS cost band
 DIAS_POR_ANIO = 365
 BESS_LIFETIME_YEARS_DEFAULT = 10
 
@@ -127,17 +127,17 @@ BESS_LIFETIME_YEARS_DEFAULT = 10
 # 2) DATA LOADING AND AGGREGATION
 # ============================================================
 
-REQUIRED_COLUMNS = ["Pen_PV", "Cost_BESS_Peru", "Cost_BESS_Intl", "Energy_Losses_USD"]
+REQUIRED_COLUMNS = ["Pen_PV", "Cost_BESS_Local", "Cost_BESS_Intl", "Energy_Losses_USD"]
 
 
-def cargar_y_agregar(csv_path, usar_costo="Peru", lifetime_years=BESS_LIFETIME_YEARS_DEFAULT):
+def cargar_y_agregar(csv_path, usar_costo="Local", lifetime_years=BESS_LIFETIME_YEARS_DEFAULT):
     """
     Loads the results CSV and aggregates by Pen_PV, taking the
     median of each metric across the Monte Carlo iterations of that
     level.
 
-    usar_costo: "Peru" or "Intl" - which BESS cost column to use
-                (Cost_BESS_Peru or Cost_BESS_Intl).
+    usar_costo: "Local" or "Intl" - which BESS cost column to use
+                (Cost_BESS_Local or Cost_BESS_Intl).
     lifetime_years: BESS lifetime in years, used to linearly amortize
                      the CAPEX into an annualized cost.
     """
@@ -307,7 +307,7 @@ def main():
     parser = argparse.ArgumentParser(
         description="Plot BESS annualized CAPEX + annualized energy losses cost (Options D and E)."
     )
-    parser.add_argument("--costo", type=str, default=COSTO, choices=["Peru", "Intl"],
+    parser.add_argument("--costo", type=str, default=COSTO, choices=["Local", "Intl"],
                          help=f"Which BESS cost band to use: Peru or Intl (default: {COSTO}).")
     parser.add_argument("--lifetime", type=float, default=BESS_LIFETIME_YEARS_DEFAULT,
                          help="BESS lifetime in years, used to amortize the CAPEX "

@@ -1,46 +1,55 @@
 # verify.py
 """
-Debug tool — runs exactly one Monte Carlo iteration and prints a full
-KPI report to the console. Also generates voltage and system profile plots.
-Does NOT write to the results CSV.
+Single-iteration debug tool.
+
+Runs exactly one simulation with the scenario defined below, prints a full
+KPI report to the console, generates the scenario DSS files, and optionally
+saves diagnostic plots. Does NOT write to the results CSV.
 
 Usage:
     python verify.py
 
-To test a specific scenario, edit the parameters at the top of this file:
-    PEN_PV   — PV penetration level [%]
-    PEN_BESS — BESS penetration level [%]
-    PEN_EV   — EV/CS penetration level [%]
-    PEN_DC   — Data Center penetration level [%]
-    SEED     — random seed for reproducibility
+Configure the scenario in the SCENARIO SETTINGS block at the top of this file:
+  - ENABLE_* flags  : choose which DER modules to activate for this test
+  - PEN_*           : penetration level for each module [%]
+  - SEED            : random seed for reproducibility
+  - SAVE_PLOTS      : whether to generate PNG diagnostic figures
 
-Output (written to results/figures/):
-    voltage_profile_<scenario>.png
-    system_profile_<scenario>.png
+DER sizes, probabilities, and network paths are read from config.py.
 """
 
-# ============================================================
-# PARÁMETROS EDITABLES
-# ============================================================
-PEN_PV   = 0    # penetración PV   [%]
-PEN_BESS = 0    # penetración BESS [%]
-PEN_EV   = 0     # penetración EV   [%]
-PEN_DC   = 0     # penetración DC   [%]
-SEED     = 2077    # semilla
-# ============================================================
+# =============================================================================
+# SCENARIO SETTINGS  —  edit this block
+# =============================================================================
+
+ENABLE_PV    = True    # Include PV generation in this test
+ENABLE_BESS  = False   # Include battery storage in this test
+ENABLE_EV_CS = False   # Include EV charging stations in this test
+ENABLE_DC    = False   # Include data centers in this test
+
+PEN_PV   = 50    # PV penetration level   [% of daily network energy]
+PEN_BESS = 0     # BESS penetration level [% of daily network energy]
+PEN_EV   = 0     # EV/CS penetration level [% of daily network energy]
+PEN_DC   = 0     # DC penetration level   [% of daily network energy]
+
+SEED = 42        # Random seed (integer for reproducibility, or None)
+
+SAVE_PLOTS = True   # Save voltage and system profile plots to results/figures/
+
+# =============================================================================
 
 import os
 import random
 import numpy as np
 
-# 1. Semilla
-random.seed(SEED)
-np.random.seed(SEED)
+# Seed
+if SEED is not None:
+    random.seed(SEED)
+    np.random.seed(SEED)
 
-# 2. Configuración
 import config as cfg
 
-# Rutas .dss generados
+# --- DSS scenario file paths (auto-generated, overwritten each run) ---
 path_pv   = os.path.join(cfg.NETWORK_DIR, "cenario_PV.dss")
 path_bess = os.path.join(cfg.NETWORK_DIR, "cenario_BESS.dss")
 path_ev   = os.path.join(cfg.NETWORK_DIR, "cenario_EV.dss")
@@ -50,7 +59,10 @@ for path in [path_pv, path_bess, path_ev, path_dc]:
     if not os.path.exists(path):
         open(path, "w").close()
 
-# 3. Caso base
+# =============================================================================
+# 1. BASE CASE  —  load network and compute daily energy reference
+# =============================================================================
+
 from core.network import run_base_case, run_with_ders
 
 base = run_base_case(
@@ -65,31 +77,33 @@ mt_phases  = base["mt_phases"]
 energy     = base["energy_kwh"]
 n_mt_total = base["n_mt_total"]
 
-# 4. PV
+# =============================================================================
+# 2. GENERATE SCENARIO FILES
+# =============================================================================
+
+# --- PV ---
 pv_units   = []
 p_total_pv = 0.0
-#if cfg.ENABLE_PV and PEN_PV > 0:
-if PEN_PV > 0:
+if ENABLE_PV and PEN_PV > 0:
     from modules.pv.pv_profiles  import load_irradiance_matrices, sample_monthly_profile
     from modules.pv.pv_allocation import allocate_pv, generate_cenario_pv
 
     irr_matrix, temp_matrix = load_irradiance_matrices(cfg.IRRADIANCE_FILE)
-    irrad_pu, temp_c, psh, mes = sample_monthly_profile(irr_matrix, temp_matrix)
+    irrad_pu, temp_c, psh, month = sample_monthly_profile(irr_matrix, temp_matrix)
     pv_units, p_total_pv = allocate_pv(
         energy, PEN_PV, psh,
         mt_buses, mt_kv, mt_phases,
         cfg.PV_SIZES_KW, cfg.PV_PROBS,
         cfg.PV_POWER_FACTOR,
     )
-    generate_cenario_pv(pv_units, irrad_pu, temp_c, path_pv, PEN_PV, mes)
+    generate_cenario_pv(pv_units, irrad_pu, temp_c, path_pv, PEN_PV, month)
 else:
     open(path_pv, "w").close()
 
-# 5. BESS
+# --- BESS ---
 bess_units   = []
 e_total_bess = 0.0
-#if cfg.ENABLE_BESS and PEN_BESS > 0:
-if PEN_BESS > 0:
+if ENABLE_BESS and PEN_BESS > 0:
     from modules.bess.bess_profiles   import load_bess_profiles
     from modules.bess.bess_allocation import allocate_bess, generate_cenario_bess
 
@@ -111,15 +125,15 @@ if PEN_BESS > 0:
 else:
     open(path_bess, "w").close()
 
-# 6. EV/CS
-ev_units = []
-#if cfg.ENABLE_EV_CS and PEN_EV > 0:
-if PEN_EV > 0:
+# --- EV/CS ---
+ev_units   = []
+e_total_ev = 0.0
+if ENABLE_EV_CS and PEN_EV > 0:
     from modules.ev_cs.ev_profiles   import load_ev_profiles
     from modules.ev_cs.ev_allocation import allocate_ev, generate_cenario_ev
 
     ev_profiles, ev_profile_names = load_ev_profiles(cfg.EV_PROFILES_DIR)
-    ev_units, _ = allocate_ev(
+    ev_units, e_total_ev = allocate_ev(
         energy, PEN_EV,
         mt_buses, mt_kv, mt_phases,
         cfg.EV_SIZES_KW, cfg.EV_PROBS,
@@ -131,12 +145,13 @@ if PEN_EV > 0:
 else:
     open(path_ev, "w").close()
 
-# 7. DC
+# --- DC ---
 dc_units   = []
 e_total_dc = 0.0
-if PEN_DC > 0:
+if ENABLE_DC and PEN_DC > 0:
     from modules.dc.dc_profiles   import load_dc_profiles, load_dc_gen_profile
     from modules.dc.dc_allocation import allocate_dc, generate_cenario_dc
+
     dc_profiles, dc_profile_names = load_dc_profiles(cfg.DC_PROFILES_DIR)
     dc_gen_profile = None
     if cfg.ENABLE_DC_GEN:
@@ -158,113 +173,111 @@ if PEN_DC > 0:
 else:
     open(path_dc, "w").close()
 
-# 8. Simulación con DERs
+# =============================================================================
+# 3. SIMULATION WITH DERs
+# =============================================================================
+
 sim = run_with_ders(
     cfg.NETWORK_DSS_PATH,
     cfg.TRANSFORMER_MVA,
-    enable_pv=cfg.ENABLE_PV,    path_pv=path_pv,
-    enable_bess=cfg.ENABLE_BESS, path_bess=path_bess,
-    enable_ev=cfg.ENABLE_EV_CS,  path_ev=path_ev,
-    enable_dc=(PEN_DC > 0),      path_dc=path_dc,
+    enable_pv=ENABLE_PV,    path_pv=path_pv,
+    enable_bess=ENABLE_BESS, path_bess=path_bess,
+    enable_ev=ENABLE_EV_CS,  path_ev=path_ev,
+    enable_dc=ENABLE_DC,     path_dc=path_dc,
     n_mt_total=n_mt_total,
 )
 
-# 9. Reporte en consola
-SEP = "═" * 48
+# =============================================================================
+# 4. CONSOLE REPORT
+# =============================================================================
+
+SEP = "=" * 52
 
 b_vmin     = len(sim["buses_vmin"])
 b_vmax     = len(sim["buses_vmax"])
 b_vminvmax = len(sim["buses_vmin"] | sim["buses_vmax"])
 
-max_losses    = float(np.max(sim["perfil_losses"]))
-energy_losses = float(np.sum(sim["perfil_losses"]))
-trafo_max     = float(np.max(sim["perfil_trafo"]))
-
-rel_pv   = os.path.relpath(path_pv,   cfg.BASE_DIR).replace("\\", "/")
-rel_bess = os.path.relpath(path_bess, cfg.BASE_DIR).replace("\\", "/")
-rel_ev   = os.path.relpath(path_ev,   cfg.BASE_DIR).replace("\\", "/")
-rel_dc   = os.path.relpath(path_dc,   cfg.BASE_DIR).replace("\\", "/")
-
 print(SEP)
-print(f" VERIFY — {cfg.NETWORK_NAME} | PV={PEN_PV}%  BESS={PEN_BESS}%  EV={PEN_EV}%  DC={PEN_DC}%  seed={SEED}")
+print(f"  VERIFY — {cfg.NETWORK_NAME} | seed={SEED}")
+print(f"  PV={PEN_PV}%  BESS={PEN_BESS}%  EV={PEN_EV}%  DC={PEN_DC}%")
 print(SEP)
 
-print(" Red")
-print(f"   Energía diaria        : {energy:,.1f} kWh")
-print(f"   Demanda máxima        : {base['p_max_kw']:,.1f} kW")
-print(f"   Barras MT candidatas  : {len(mt_buses)}")
-print()
+print("\n  Network")
+print(f"    Daily energy demand   : {energy:>10,.1f} kWh")
+print(f"    Peak demand           : {base['p_max_kw']:>10,.1f} kW")
+print(f"    MV candidate buses    : {len(mt_buses):>10}")
 
-if cfg.ENABLE_PV:
-    print(" PV instalado")
-    print(f"   Unidades              : {len(pv_units)}")
-    print(f"   Potencia total        : {p_total_pv:,.1f} kW")
-    print()
+if ENABLE_PV and pv_units:
+    print(f"\n  PV  ({PEN_PV}%)")
+    print(f"    Units installed       : {len(pv_units):>10}")
+    print(f"    Total power           : {p_total_pv:>10,.1f} kWp")
 
-if cfg.ENABLE_BESS:
-    print(" BESS instalado")
-    print(f"   Unidades              : {len(bess_units)}")
-    print(f"   Energía total         : {e_total_bess:,.1f} kWh")
-    print()
+if ENABLE_BESS and bess_units:
+    print(f"\n  BESS  ({PEN_BESS}%)")
+    print(f"    Units installed       : {len(bess_units):>10}")
+    print(f"    Total capacity        : {e_total_bess:>10,.1f} kWh")
 
-print(" EV/CS instalado")
-print(f"   Estaciones            : {len(ev_units)}")
-print()
+if ENABLE_EV_CS and ev_units:
+    print(f"\n  EV/CS  ({PEN_EV}%)")
+    print(f"    Stations installed    : {len(ev_units):>10}")
+    print(f"    Total power           : {sum(u['kw'] for u in ev_units):>10,.1f} kW")
 
-if dc_units:
-    avg_pue     = sum(u["pue"] for u in dc_units) / len(dc_units)
-    tot_servers = sum(u["n_servers_equiv"] for u in dc_units)
-    tot_peak    = sum(u["peak_kw"] for u in dc_units)
-    arquetipos  = ", ".join(dict.fromkeys(u["profile_name"] for u in dc_units))
-    print(" Data Center")
-    print(f"   DCs instalados        : {len(dc_units)}")
-    print(f"   Energía total DC      : {e_total_dc:,.1f} kWh")
-    print(f"   Pico máximo           : {tot_peak:,.1f} kW")
-    print(f"   PUE promedio          : {avg_pue:.2f}")
-    print(f"   Servidores equiv.     : {tot_servers:,}")
-    print(f"   Arquetipo(s)          : {arquetipos}")
-    print()
+if ENABLE_DC and dc_units:
+    avg_pue  = sum(u["pue"] for u in dc_units) / len(dc_units)
+    tot_peak = sum(u["peak_kw"] for u in dc_units)
+    archetypes = ", ".join(dict.fromkeys(u["profile_name"] for u in dc_units))
+    print(f"\n  Data Centers  ({PEN_DC}%)")
+    print(f"    DCs installed         : {len(dc_units):>10}")
+    print(f"    Total energy          : {e_total_dc:>10,.1f} kWh")
+    print(f"    Peak power            : {tot_peak:>10,.1f} kW")
+    print(f"    Avg PUE               : {avg_pue:>10.2f}")
+    print(f"    Archetype(s)          : {archetypes}")
 
-print(" KPIs simulación")
-print(f"   B_Vmin                : {b_vmin}  barras con subtensión")
-print(f"   B_Vmax                : {b_vmax}  barras con sobretensión")
-print(f"   B_VminVmax            : {b_vminvmax}  barras afectadas (unión)")
-print(f"   Max pérdidas activas  : {max_losses:,.1f} kW")
-print(f"   Energía pérdidas      : {energy_losses:,.1f} kWh")
-print(f"   Cargamento trafo máx  : {trafo_max:.1f} %")
-print(f"   Vmin 24h              : {sim['vmin_24h']:.3f} pu")
-print(f"   Vmax 24h              : {sim['vmax_24h']:.3f} pu")
-print(f"   Sev. subtensión       : {sim['sev_vmin_pct']:.2f} %")
-print(f"   Sev. sobretensión     : {sim['sev_vmax_pct']:.2f} %")
-print(f"   Sev. combinada        : {sim['sev_union_pct']:.2f} %")
-print()
+print(f"\n  Simulation KPIs")
+print(f"    Undervoltage buses    : {b_vmin:>10}   (< 0.95 pu in ≥1 hour)")
+print(f"    Overvoltage buses     : {b_vmax:>10}   (> 1.05 pu in ≥1 hour)")
+print(f"    Affected buses (union): {b_vminvmax:>10}")
+print(f"    Vmin over 24h         : {sim['vmin_24h']:>10.4f} pu")
+print(f"    Vmax over 24h         : {sim['vmax_24h']:>10.4f} pu")
+print(f"    Undervoltage severity : {sim['sev_vmin_pct']:>10.2f} %  (bus×hour pairs)")
+print(f"    Overvoltage severity  : {sim['sev_vmax_pct']:>10.2f} %  (bus×hour pairs)")
+print(f"    Combined severity     : {sim['sev_union_pct']:>10.2f} %")
+print(f"    Peak active losses    : {float(np.max(sim['perfil_losses'])):>10,.1f} kW")
+print(f"    Daily energy losses   : {float(np.sum(sim['perfil_losses'])):>10,.1f} kWh")
+print(f"    Peak transformer load : {float(np.max(sim['perfil_trafo'])):>10.1f} %")
 
-print(" Archivos DSS generados en:")
-print(f"   {rel_pv}")
-print(f"   {rel_bess}")
-print(f"   {rel_ev}")
-print(f"   {rel_dc}")
+print(f"\n  Generated DSS files")
+for label, path in [("PV", path_pv), ("BESS", path_bess),
+                    ("EV/CS", path_ev), ("DC", path_dc)]:
+    rel = os.path.relpath(path, cfg.BASE_DIR).replace("\\", "/")
+    size = os.path.getsize(path)
+    status = f"{size:,} B" if size > 0 else "empty (module disabled)"
+    print(f"    {label:<6}: {rel}  [{status}]")
+
 print(SEP)
 
-# 10. Gráfico de tensión
-from plots.plot_voltage import plot_voltage_profile
+# =============================================================================
+# 5. DIAGNOSTIC PLOTS
+# =============================================================================
 
-plot_voltage_profile(
-    sim["perfil_tension_barras"],
-    PEN_PV, PEN_BESS, PEN_EV, SEED,
-    os.path.join(cfg.RESULTS_DIR, "figures"),
-    cfg.NETWORK_NAME,
-    pen_dc=PEN_DC,
-)
+if SAVE_PLOTS:
+    out_dir = os.path.join(cfg.RESULTS_DIR, "figures")
 
-# 11. Gráficos de sistema (flujo, transformador, pérdidas)
-from plots.plot_system import plot_system_profile
+    from plots.plot_voltage import plot_voltage_profile
+    plot_voltage_profile(
+        sim["perfil_tension_barras"],
+        PEN_PV, PEN_BESS, PEN_EV, SEED,
+        out_dir, cfg.NETWORK_NAME,
+        pen_dc=PEN_DC,
+    )
 
-plot_system_profile(
-    sim,
-    cfg.TRANSFORMER_MVA,
-    PEN_PV, PEN_BESS, PEN_EV, SEED,
-    os.path.join(cfg.RESULTS_DIR, "figures"),
-    cfg.NETWORK_NAME,
-    pen_dc=PEN_DC,
-)
+    from plots.plot_system import plot_system_profile
+    plot_system_profile(
+        sim, cfg.TRANSFORMER_MVA,
+        PEN_PV, PEN_BESS, PEN_EV, SEED,
+        out_dir, cfg.NETWORK_NAME,
+        pen_dc=PEN_DC,
+    )
+
+    print(f"\n  Plots saved to: {out_dir}/")
+    print(SEP)

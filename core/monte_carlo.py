@@ -218,17 +218,17 @@ def run_monte_carlo(cfg):
                 "BESS_kWh_inst": bess_kwh_inst,
                 "EV_kW_inst":    ev_kw_inst,
                 "DC_kW_inst":    dc_kw_inst,
-                "Cost_PV_Peru":   pv_kw_inst    * cfg.PV_USD_PER_KW_PERU,
+                "Cost_PV_Local":  pv_kw_inst    * cfg.PV_USD_PER_KW_LOCAL,
                 "Cost_PV_Intl":   pv_kw_inst    * cfg.PV_USD_PER_KW_INTL,
-                "Cost_BESS_Peru": bess_kwh_inst * cfg.BESS_USD_PER_KWH_BASE,
+                "Cost_BESS_Local":bess_kwh_inst * cfg.BESS_USD_PER_KWH_LOCAL,
                 "Cost_BESS_Intl": bess_kwh_inst * cfg.BESS_USD_PER_KWH_INTL,
-                "Cost_EVCS_Peru": ev_kw_inst    * cfg.EVCS_USD_PER_KW_PERU,
+                "Cost_EVCS_Local":ev_kw_inst    * cfg.EVCS_USD_PER_KW_LOCAL,
                 "Cost_EVCS_Intl": ev_kw_inst    * cfg.EVCS_USD_PER_KW_INTL,
                 "Cost_DC":        dc_kw_inst    * cfg.DC_USD_PER_KW,
                 "Energy_Losses_USD": energy_losses_kwh * cfg.ENERGY_LOSS_TARIFF_USD_PER_KWH,
             }
-            costs["Cost_Total_Peru"] = (
-                costs["Cost_PV_Peru"] + costs["Cost_BESS_Peru"] + costs["Cost_EVCS_Peru"]
+            costs["Cost_Total_Local"] = (
+                costs["Cost_PV_Local"] + costs["Cost_BESS_Local"] + costs["Cost_EVCS_Local"]
             )
             costs["Cost_Total_Intl"] = (
                 costs["Cost_PV_Intl"] + costs["Cost_BESS_Intl"] + costs["Cost_EVCS_Intl"]
