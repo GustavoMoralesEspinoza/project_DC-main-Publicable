@@ -1,4 +1,4 @@
-# verify.py
+﻿# verify.py
 """
 Single-iteration debug tool.
 
@@ -19,7 +19,7 @@ DER sizes, probabilities, and network paths are read from config.py.
 """
 
 # =============================================================================
-# SCENARIO SETTINGS  —  edit this block
+# SCENARIO SETTINGS  â€”  edit this block
 # =============================================================================
 
 ENABLE_PV    = True    # Include PV generation in this test
@@ -60,7 +60,7 @@ for path in [path_pv, path_bess, path_ev, path_dc]:
         open(path, "w").close()
 
 # =============================================================================
-# 1. BASE CASE  —  load network and compute daily energy reference
+# 1. BASE CASE  â€”  load network and compute daily energy reference
 # =============================================================================
 
 from core.network import run_base_case, run_with_ders
@@ -198,7 +198,7 @@ b_vmax     = len(sim["buses_vmax"])
 b_vminvmax = len(sim["buses_vmin"] | sim["buses_vmax"])
 
 print(SEP)
-print(f"  VERIFY — {cfg.NETWORK_NAME} | seed={SEED}")
+print(f"  VERIFY â€” {cfg.NETWORK_NAME} | seed={SEED}")
 print(f"  PV={PEN_PV}%  BESS={PEN_BESS}%  EV={PEN_EV}%  DC={PEN_DC}%")
 print(SEP)
 
@@ -234,13 +234,13 @@ if ENABLE_DC and dc_units:
     print(f"    Archetype(s)          : {archetypes}")
 
 print(f"\n  Simulation KPIs")
-print(f"    Undervoltage buses    : {b_vmin:>10}   (< 0.95 pu in ≥1 hour)")
-print(f"    Overvoltage buses     : {b_vmax:>10}   (> 1.05 pu in ≥1 hour)")
+print(f"    Undervoltage buses    : {b_vmin:>10}   (< 0.95 pu in â‰¥1 hour)")
+print(f"    Overvoltage buses     : {b_vmax:>10}   (> 1.05 pu in â‰¥1 hour)")
 print(f"    Affected buses (union): {b_vminvmax:>10}")
 print(f"    Vmin over 24h         : {sim['vmin_24h']:>10.4f} pu")
 print(f"    Vmax over 24h         : {sim['vmax_24h']:>10.4f} pu")
-print(f"    Undervoltage severity : {sim['sev_vmin_pct']:>10.2f} %  (bus×hour pairs)")
-print(f"    Overvoltage severity  : {sim['sev_vmax_pct']:>10.2f} %  (bus×hour pairs)")
+print(f"    Undervoltage severity : {sim['sev_vmin_pct']:>10.2f} %  (busÃ—hour pairs)")
+print(f"    Overvoltage severity  : {sim['sev_vmax_pct']:>10.2f} %  (busÃ—hour pairs)")
 print(f"    Combined severity     : {sim['sev_union_pct']:>10.2f} %")
 print(f"    Peak active losses    : {float(np.max(sim['perfil_losses'])):>10,.1f} kW")
 print(f"    Daily energy losses   : {float(np.sum(sim['perfil_losses'])):>10,.1f} kWh")
@@ -281,3 +281,4 @@ if SAVE_PLOTS:
 
     print(f"\n  Plots saved to: {out_dir}/")
     print(SEP)
+
