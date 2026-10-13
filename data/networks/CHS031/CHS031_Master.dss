@@ -1,0 +1,13 @@
+Clear
+Set DefaultBaseFrequency=60
+New Circuit.CHS031 basekv=13.8 pu=1.00 bus1=N180 mvasc3=100 mvasc1=80 angle=76 ! S1: Scc3f=100MVA, X/R=4 -> angle=atan(4)
+Redirect LineCodes.dss
+Redirect LoadShapes.dss
+Redirect Lines.dss
+Redirect Transformers.dss
+Redirect Loads.dss
+New EnergyMeter.Feeder Line.L191 1 ! linea de cabecera, bus1=N180 (raiz Fase 1)
+Set Voltagebases=[13.8, 0.4]
+CalcVoltageBases
+Solve
+Buscoords BusCoords.dss

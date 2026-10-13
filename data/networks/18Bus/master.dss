@@ -1,0 +1,60 @@
+Clear
+New object=circuit.arquivodss2  basekv=13.8 pu=1.05 angle=0 mvasc3=976 mvasc1=767 x1r1=8.33 x0r0=4.02
+
+! ===== Líneas (igual que tu caso) =====
+New Line.L_B2_B3   Phases=3 Bus1=B2.1.2.3 Bus2=B3.1.2.3   length=1 r1=1.0 x1=0 r0=1.0 x0=0 c1=0 c0=0 units=km  normamps=250
+New Line.L_B3_B4   Phases=3 Bus1=B3.1.2.3 Bus2=B4.1.2.3   length=1 r1=1.0 x1=0 r0=1.0 x0=0 c1=0 c0=0 units=km  normamps=250
+New Line.L_B1_B5   Phases=3 Bus1=B1.1.2.3 Bus2=B5.1.2.3   length=1 r1=0.5 x1=0 r0=0.5 x0=0 c1=0 c0=0 units=km  normamps=500
+New Line.L_B5_B6   Phases=3 Bus1=B5.1.2.3 Bus2=B6.1.2.3   length=1 r1=1.0 x1=0 r0=1.0 x0=0 c1=0 c0=0 units=km  normamps=250
+New Line.L_SE_17_B5   Phases=3 Bus1=sourcebus.1.2.3 Bus2=B5.1.2.3   length=1 r1=1.0 x1=0 r0=1.0 x0=0 c1=0 c0=0 units=km  normamps=250
+New Line.L_B12_B16   Phases=3 Bus1=B12.1.2.3 Bus2=B16.1.2.3 length=1 r1=1.0 x1=0 r0=1.0 x0=0 c1=0 c0=0 units=km  normamps=250
+New Line.L_SE_18_B12  Phases=3 Bus1=sourcebus.1.2.3 Bus2=B12.1.2.3 length=1 r1=1.0 x1=0 r0=1.0 x0=0 c1=0 c0=0 units=km  normamps=250
+New Line.L_B4_B8   Phases=3 Bus1=B4.1.2.3 Bus2=B8.1.2.3   length=1 r1=0.7 x1=0 r0=0.7 x0=0 c1=0 c0=0 units=km  normamps=400
+New Line.L_B7_B8   Phases=3 Bus1=B7.1.2.3 Bus2=B8.1.2.3   length=1 r1=1.0 x1=0 r0=1.0 x0=0 c1=0 c0=0 units=km  normamps=250
+New Line.L_SE_18_B7   Phases=3 Bus1=sourcebus.1.2.3 Bus2=B7.1.2.3   length=1 r1=0.5 x1=0 r0=0.5 x0=0 c1=0 c0=0 units=km  normamps=500
+New Line.L_SE_17_B9   Phases=3 Bus1=sourcebus.1.2.3 Bus2=B9.1.2.3   length=1 r1=1.0 x1=0 r0=1.0 x0=0 c1=0 c0=0 units=km  normamps=250
+New Line.L_B10_B11   Phases=3 Bus1=B10.1.2.3 Bus2=B11.1.2.3 length=1 r1=0.5 x1=0 r0=0.5 x0=0 c1=0 c0=0 units=km  normamps=500
+New Line.L_B11_B15   Phases=3 Bus1=B11.1.2.3 Bus2=B15.1.2.3 length=1 r1=1.0 x1=0 r0=1.0 x0=0 c1=0 c0=0 units=km  normamps=250
+New Line.L_SE_18_B11  Phases=3 Bus1=sourcebus.1.2.3 Bus2=B11.1.2.3 length=1 r1=0.5 x1=0 r0=0.5 x0=0 c1=0 c0=0 units=km  normamps=500
+New Line.L_B13_B14   Phases=3 Bus1=B13.1.2.3 Bus2=B14.1.2.3 length=1 r1=0.7 x1=0 r0=0.7 x0=0 c1=0 c0=0 units=km  normamps=400
+New Line.L_SE_17_B13  Phases=3 Bus1=sourcebus.1.2.3 Bus2=B13.1.2.3 length=1 r1=1.0 x1=0 r0=1.0 x0=0 c1=0 c0=0 units=km  normamps=250
+
+! ===== Perfiles más realistas (normalizados, sin picos extremos) =====
+! Residencial: valle madrugada, pico vespertino-noche
+New LoadShape.Residencial npts=24 interval=1 mult=(0.35 0.33 0.32 0.32 0.34 0.40 0.55 0.75 0.90 1.00 1.05 1.05 0.95 0.85 0.75 0.80 0.85 0.95 1.15 1.20 1.10 0.90 0.65 0.45)
+!New LoadShape.Residencial npts=24 interval=1 mult=(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1)
+
+! Comercial: pico mediodía, bajo en la noche
+New LoadShape.Comercial   npts=24 interval=1 mult=(0.20 0.20 0.20 0.20 0.30 0.50 0.90 1.20 1.50 1.60 1.60 1.55 1.50 1.40 1.20 1.00 0.80 0.60 0.40 0.30 0.25 0.22 0.20 0.20)
+!New LoadShape.Comercial   npts=24 interval=1 mult=(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1)
+
+! Industrial: más plano, mayor factor de utilización
+New LoadShape.Industrial  npts=24 interval=1 mult=(0.60 0.60 0.65 0.70 0.75 0.80 0.90 0.95 1.05 1.10 1.10 1.10 1.05 1.00 1.00 1.00 0.95 0.90 0.85 0.80 0.75 0.70 0.65 0.60)
+!New LoadShape.Industrial  npts=24 interval=1 mult=(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1)
+
+! (Opcional) perfil agregado por si quieres escalar algo global (ahora a 1.0)
+New Loadshape.PerfilCargaDia npts=24 interval=1 mult=(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1)
+
+! ===== Cargas (pf=1.00) =====
+New Load.Carga_B1   Bus1=B1   Phases=3 Conn=Wye Model=1 kV=13.8 kW=1195.12 pf=1.00 daily=Industrial
+New Load.Carga_B2   Bus1=B2   Phases=3 Conn=Wye Model=1 kV=13.8 kW=1195.12 pf=1.00 daily=Residencial
+New Load.Carga_B3   Bus1=B3   Phases=3 Conn=Wye Model=1 kV=13.8 kW=1195.12 pf=1.00 daily=Residencial
+New Load.Carga_B4   Bus1=B4   Phases=3 Conn=Wye Model=1 kV=13.8 kW=1195.12 pf=1.00 daily=Industrial
+New Load.Carga_B5   Bus1=B5   Phases=3 Conn=Wye Model=1 kV=13.8 kW=1195.12 pf=1.00 daily=Residencial
+New Load.Carga_B6   Bus1=B6   Phases=3 Conn=Wye Model=1 kV=13.8 kW=1195.12 pf=1.00 daily=Residencial
+New Load.Carga_B7   Bus1=B7   Phases=3 Conn=Wye Model=1 kV=13.8 kW=1195.12 pf=1.00 daily=Residencial
+New Load.Carga_B8   Bus1=B8   Phases=3 Conn=Wye Model=1 kV=13.8 kW=1195.12 pf=1.00 daily=Residencial
+New Load.Carga_B9   Bus1=B9   Phases=3 Conn=Wye Model=1 kV=13.8 kW=2390.23 pf=1.00 daily=Residencial
+New Load.Carga_B10  Bus1=B10  Phases=3 Conn=Wye Model=1 kV=13.8 kW=2390.23 pf=1.00 daily=Residencial
+New Load.Carga_B11  Bus1=B11  Phases=3 Conn=Wye Model=1 kV=13.8 kW=3585.35 pf=1.00 daily=Residencial
+New Load.Carga_B12  Bus1=B12  Phases=3 Conn=Wye Model=1 kV=13.8 kW=1195.12 pf=1.00 daily=Comercial
+New Load.Carga_B13  Bus1=B13  Phases=3 Conn=Wye Model=1 kV=13.8 kW=3585.35 pf=1.00 daily=Comercial
+New Load.Carga_B14  Bus1=B14  Phases=3 Conn=Wye Model=1 kV=13.8 kW=2390.23 pf=1.00 daily=Residencial
+New Load.Carga_B15  Bus1=B15  Phases=3 Conn=Wye Model=1 kV=13.8 kW=2390.23 pf=1.00 daily=Residencial
+New Load.Carga_B16  Bus1=B16  Phases=3 Conn=Wye Model=1 kV=13.8 kW=1195.12 pf=1.00 daily=Residencial
+
+Set VoltageBases = "13.8"
+CalcVoltageBases
+Set mode=daily
+Set number = 24
+Solve

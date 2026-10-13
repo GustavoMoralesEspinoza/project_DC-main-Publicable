@@ -1,0 +1,47 @@
+# Entorno virtual
+.venv/
+venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Herramientas de desarrollo (IA, IDE local)
+.claude/
+.agents/
+.vscode/
+.idea/
+
+# Scripts de preparación de datos (uso interno, no necesarios para correr el framework)
+generar_perfil_irradiancia_arequipa.py
+generar_perfil_irradiancia_arequipa_nasapower.py
+
+# ── Outputs generados por el framework ────────────────────────────────────────
+
+# Resultados de simulación Monte Carlo
+results/*.csv
+results/figures/
+results/hourly/
+results/BASE_PAPER_UNI/
+results/resultados_*/
+
+# Figuras generadas por scripts de plots/
+plots/Articulo/
+plots/curvas_multi/
+plots/perfiles24h/
+plots/resultados_*/
+plots/violines_*/
+plots/OLds/
+
+# Directorio de figuras en raíz (generado por verify.py / plot_all.py)
+figures/
+
+# ── Archivos DSS generados en runtime ─────────────────────────────────────────
+# Se recrean automáticamente en cada simulación — no deben estar en git
+data/networks/**/cenario_*.dss
+
+# Figuras y PDFs generados dentro de data/networks/
+data/networks/**/*.png
+data/networks/**/*.pdf
+data/networks/**/output/

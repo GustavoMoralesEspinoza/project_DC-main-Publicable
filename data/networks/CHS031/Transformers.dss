@@ -1,0 +1,426 @@
+New Transformer.T_CH0026 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N32 conn=delta kv=13.8 kva=25.0 %r=1
+~ wdg=2 bus=SED_CH0026_LV conn=wye kv=0.4 kva=25.0 %r=1
+New Transformer.T_CH0038 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N31 conn=delta kv=13.8 kva=40.0 %r=1
+~ wdg=2 bus=SED_CH0038_LV conn=wye kv=0.4 kva=40.0 %r=1
+New Transformer.T_CH0241 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N81 conn=delta kv=13.8 kva=100.0 %r=1
+~ wdg=2 bus=SED_CH0241_LV conn=wye kv=0.4 kva=100.0 %r=1
+New Transformer.T_CH0242 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N339 conn=delta kv=13.8 kva=100.0 %r=1
+~ wdg=2 bus=SED_CH0242_LV conn=wye kv=0.4 kva=100.0 %r=1
+New Transformer.T_CH0245 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N32 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH0245_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH0246 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N54 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH0246_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH0247 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N18 conn=delta kv=13.8 kva=150.0 %r=1
+~ wdg=2 bus=SED_CH0247_LV conn=wye kv=0.4 kva=150.0 %r=1
+New Transformer.T_CH0248 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N49 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH0248_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH0249 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N106 conn=delta kv=13.8 kva=100.0 %r=1
+~ wdg=2 bus=SED_CH0249_LV conn=wye kv=0.4 kva=100.0 %r=1
+New Transformer.T_CH0250 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N71 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH0250_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH0251 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N72 conn=delta kv=13.8 kva=100.0 %r=1
+~ wdg=2 bus=SED_CH0251_LV conn=wye kv=0.4 kva=100.0 %r=1
+New Transformer.T_CH0262 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N115 conn=delta kv=13.8 kva=125.0 %r=1
+~ wdg=2 bus=SED_CH0262_LV conn=wye kv=0.4 kva=125.0 %r=1
+New Transformer.T_CH0263 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N112 conn=delta kv=13.8 kva=100.0 %r=1
+~ wdg=2 bus=SED_CH0263_LV conn=wye kv=0.4 kva=100.0 %r=1
+New Transformer.T_CH0264 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N69 conn=delta kv=13.8 kva=100.0 %r=1
+~ wdg=2 bus=SED_CH0264_LV conn=wye kv=0.4 kva=100.0 %r=1
+New Transformer.T_CH0265 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N69 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH0265_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH0266 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N25 conn=delta kv=13.8 kva=100.0 %r=1
+~ wdg=2 bus=SED_CH0266_LV conn=wye kv=0.4 kva=100.0 %r=1
+New Transformer.T_CH0267 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N77 conn=delta kv=13.8 kva=100.0 %r=1
+~ wdg=2 bus=SED_CH0267_LV conn=wye kv=0.4 kva=100.0 %r=1
+New Transformer.T_CH0268 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N76 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH0268_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH0269 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N27 conn=delta kv=13.8 kva=125.0 %r=1
+~ wdg=2 bus=SED_CH0269_LV conn=wye kv=0.4 kva=125.0 %r=1
+New Transformer.T_CH0467 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N92 conn=delta kv=13.8 kva=100.0 %r=1
+~ wdg=2 bus=SED_CH0467_LV conn=wye kv=0.4 kva=100.0 %r=1
+New Transformer.T_CH0468 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N355 conn=delta kv=13.8 kva=250.0 %r=1
+~ wdg=2 bus=SED_CH0468_LV conn=wye kv=0.4 kva=250.0 %r=1
+New Transformer.T_CH0469 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N65 conn=delta kv=13.8 kva=200.0 %r=1
+~ wdg=2 bus=SED_CH0469_LV conn=wye kv=0.4 kva=200.0 %r=1
+New Transformer.T_CH0470 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N66 conn=delta kv=13.8 kva=250.0 %r=1
+~ wdg=2 bus=SED_CH0470_LV conn=wye kv=0.4 kva=250.0 %r=1
+New Transformer.T_CH0471 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N352 conn=delta kv=13.8 kva=150.0 %r=1
+~ wdg=2 bus=SED_CH0471_LV conn=wye kv=0.4 kva=150.0 %r=1
+New Transformer.T_CH0472 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N97 conn=delta kv=13.8 kva=160.0 %r=1
+~ wdg=2 bus=SED_CH0472_LV conn=wye kv=0.4 kva=160.0 %r=1
+New Transformer.T_CH0473 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N99 conn=delta kv=13.8 kva=25.0 %r=1
+~ wdg=2 bus=SED_CH0473_LV conn=wye kv=0.4 kva=25.0 %r=1
+New Transformer.T_CH0488 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N59 conn=delta kv=13.8 kva=160.0 %r=1
+~ wdg=2 bus=SED_CH0488_LV conn=wye kv=0.4 kva=160.0 %r=1
+New Transformer.T_CH0544 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N44 conn=delta kv=13.8 kva=160.0 %r=1
+~ wdg=2 bus=SED_CH0544_LV conn=wye kv=0.4 kva=160.0 %r=1
+New Transformer.T_CH0614 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N80 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH0614_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH0627 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N62 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH0627_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH0858 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N26 conn=delta kv=13.8 kva=100.0 %r=1
+~ wdg=2 bus=SED_CH0858_LV conn=wye kv=0.4 kva=100.0 %r=1
+New Transformer.T_CH0859 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N112 conn=delta kv=13.8 kva=37.5 %r=1
+~ wdg=2 bus=SED_CH0859_LV conn=wye kv=0.4 kva=37.5 %r=1
+New Transformer.T_CH0860 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N17 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH0860_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH0861 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N68 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH0861_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH0862 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N115 conn=delta kv=13.8 kva=100.0 %r=1
+~ wdg=2 bus=SED_CH0862_LV conn=wye kv=0.4 kva=100.0 %r=1
+New Transformer.T_CH0871 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N23 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH0871_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH0872 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N28 conn=delta kv=13.8 kva=37.5 %r=1
+~ wdg=2 bus=SED_CH0872_LV conn=wye kv=0.4 kva=37.5 %r=1
+New Transformer.T_CH0873 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N33 conn=delta kv=13.8 kva=25.0 %r=1
+~ wdg=2 bus=SED_CH0873_LV conn=wye kv=0.4 kva=25.0 %r=1
+New Transformer.T_CH0875 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N110 conn=delta kv=13.8 kva=37.5 %r=1
+~ wdg=2 bus=SED_CH0875_LV conn=wye kv=0.4 kva=37.5 %r=1
+New Transformer.T_CH0881 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N268 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH0881_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH1020 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N106 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH1020_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH1021 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N75 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1021_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1030 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N40 conn=delta kv=13.8 kva=80.0 %r=1
+~ wdg=2 bus=SED_CH1030_LV conn=wye kv=0.4 kva=80.0 %r=1
+New Transformer.T_CH1182 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N140 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1182_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1183 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N155 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1183_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1367 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N143 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH1367_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH1368 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N274 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1368_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1373 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N149 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1373_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1374 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N164 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1374_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1375 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N273 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH1375_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH1376 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N140 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH1376_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH1438 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N163 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1438_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1439 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N324 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH1439_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH1440 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N358 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1440_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1441 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N168 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1441_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1442 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N168 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH1442_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH1443 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N168 conn=delta kv=13.8 kva=37.5 %r=1
+~ wdg=2 bus=SED_CH1443_LV conn=wye kv=0.4 kva=37.5 %r=1
+New Transformer.T_CH1444 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N168 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH1444_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH1449 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N180 conn=delta kv=13.8 kva=25.0 %r=1
+~ wdg=2 bus=SED_CH1449_LV conn=wye kv=0.4 kva=25.0 %r=1
+New Transformer.T_CH1527 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N217 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1527_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1528 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N211 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1528_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1529 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N186 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1529_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1530 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N253 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1530_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1531 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N205 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1531_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1532 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N257 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1532_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1533 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N209 conn=delta kv=13.8 kva=37.5 %r=1
+~ wdg=2 bus=SED_CH1533_LV conn=wye kv=0.4 kva=37.5 %r=1
+New Transformer.T_CH1534 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N235 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH1534_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH1535 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N223 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH1535_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH1536 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N231 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH1536_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH1537 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N221 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1537_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1538 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N258 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1538_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1539 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N227 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1539_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1540 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N129 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1540_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1541 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N186 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH1541_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH1542 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N85 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1542_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1543 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N87 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1543_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1544 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N188 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1544_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1545 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N185 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1545_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1546 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N190 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1546_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1547 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N190 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH1547_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH1548 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N194 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH1548_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH1549 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N194 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1549_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1550 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N198 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH1550_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH1551 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N201 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1551_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1552 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N203 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1552_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1553 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N209 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH1553_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH1554 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N210 conn=delta kv=13.8 kva=37.5 %r=1
+~ wdg=2 bus=SED_CH1554_LV conn=wye kv=0.4 kva=37.5 %r=1
+New Transformer.T_CH1555 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N233 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1555_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1556 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N230 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH1556_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH1560 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N215 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1560_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1561 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N254 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1561_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1562 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N302 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1562_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1616 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N57 conn=delta kv=13.8 kva=100.0 %r=1
+~ wdg=2 bus=SED_CH1616_LV conn=wye kv=0.4 kva=100.0 %r=1
+New Transformer.T_CH1837 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N272 conn=delta kv=13.8 kva=37.5 %r=1
+~ wdg=2 bus=SED_CH1837_LV conn=wye kv=0.4 kva=37.5 %r=1
+New Transformer.T_CH1838 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N268 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1838_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1839 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N102 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH1839_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH1843 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N162 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1843_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1894 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N277 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1894_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1895 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N282 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH1895_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH1896 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N281 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH1896_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH1897 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N289 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH1897_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH1898 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N293 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH1898_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH1899 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N296 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH1899_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH1937 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N266 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH1937_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH1986 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N358 conn=delta kv=13.8 kva=100.0 %r=1
+~ wdg=2 bus=SED_CH1986_LV conn=wye kv=0.4 kva=100.0 %r=1
+New Transformer.T_CH1996 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N349 conn=delta kv=13.8 kva=100.0 %r=1
+~ wdg=2 bus=SED_CH1996_LV conn=wye kv=0.4 kva=100.0 %r=1
+New Transformer.T_CH2012 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N300 conn=delta kv=13.8 kva=100.0 %r=1
+~ wdg=2 bus=SED_CH2012_LV conn=wye kv=0.4 kva=100.0 %r=1
+New Transformer.T_CH2014 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N357 conn=delta kv=13.8 kva=100.0 %r=1
+~ wdg=2 bus=SED_CH2014_LV conn=wye kv=0.4 kva=100.0 %r=1
+New Transformer.T_CH2029 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N346 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH2029_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH2068 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N369 conn=delta kv=13.8 kva=100.0 %r=1
+~ wdg=2 bus=SED_CH2068_LV conn=wye kv=0.4 kva=100.0 %r=1
+New Transformer.T_CH2094 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N303 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH2094_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH2095 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N305 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH2095_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH2096 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N307 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH2096_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH2097 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N46 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH2097_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH2098 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N92 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH2098_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH2099 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N57 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH2099_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH2141 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N335 conn=delta kv=13.8 kva=100.0 %r=1
+~ wdg=2 bus=SED_CH2141_LV conn=wye kv=0.4 kva=100.0 %r=1
+New Transformer.T_CH2158 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N317 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH2158_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH2186 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N322 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH2186_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH2187 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N319 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH2187_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH2188 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N316 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH2188_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH2189 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N357 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH2189_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH2190 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N328 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH2190_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH2191 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N329 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH2191_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH2199 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N361 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH2199_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH2220 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N338 conn=delta kv=13.8 kva=125.0 %r=1
+~ wdg=2 bus=SED_CH2220_LV conn=wye kv=0.4 kva=125.0 %r=1
+New Transformer.T_CH2254 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N334 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH2254_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH2300 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N345 conn=delta kv=13.8 kva=100.0 %r=1
+~ wdg=2 bus=SED_CH2300_LV conn=wye kv=0.4 kva=100.0 %r=1
+New Transformer.T_CH2301 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N53 conn=delta kv=13.8 kva=100.0 %r=1
+~ wdg=2 bus=SED_CH2301_LV conn=wye kv=0.4 kva=100.0 %r=1
+New Transformer.T_CH2320 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N370 conn=delta kv=13.8 kva=100.0 %r=1
+~ wdg=2 bus=SED_CH2320_LV conn=wye kv=0.4 kva=100.0 %r=1
+New Transformer.T_CH7142 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N3 conn=delta kv=13.8 kva=125.0 %r=1
+~ wdg=2 bus=SED_CH7142_LV conn=wye kv=0.4 kva=125.0 %r=1
+New Transformer.T_CH7143 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N0 conn=delta kv=13.8 kva=64.0 %r=1
+~ wdg=2 bus=SED_CH7143_LV conn=wye kv=0.4 kva=64.0 %r=1
+New Transformer.T_CH7146 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N268 conn=delta kv=13.8 kva=220.0 %r=1
+~ wdg=2 bus=SED_CH7146_LV conn=wye kv=0.4 kva=220.0 %r=1
+New Transformer.T_CH7147 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N271 conn=delta kv=13.8 kva=300.0 %r=1
+~ wdg=2 bus=SED_CH7147_LV conn=wye kv=0.4 kva=300.0 %r=1
+New Transformer.T_CH7158 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N271 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH7158_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH7252 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N182 conn=delta kv=13.8 kva=80.0 %r=1
+~ wdg=2 bus=SED_CH7252_LV conn=wye kv=0.4 kva=80.0 %r=1
+New Transformer.T_CH7293 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N28 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH7293_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH7312 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N79 conn=delta kv=13.8 kva=50.0 %r=1
+~ wdg=2 bus=SED_CH7312_LV conn=wye kv=0.4 kva=50.0 %r=1
+New Transformer.T_CH7325 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N223 conn=delta kv=13.8 kva=400.0 %r=1
+~ wdg=2 bus=SED_CH7325_LV conn=wye kv=0.4 kva=400.0 %r=1
+New Transformer.T_CH7824 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N258 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH7824_LV conn=wye kv=0.4 kva=75.0 %r=1
+New Transformer.T_CH7869 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N271 conn=delta kv=13.8 kva=400.0 %r=1
+~ wdg=2 bus=SED_CH7869_LV conn=wye kv=0.4 kva=400.0 %r=1
+New Transformer.T_CH7893 phases=3 windings=2 xhl=5 %noloadloss=0.1
+~ wdg=1 bus=N368 conn=delta kv=13.8 kva=75.0 %r=1
+~ wdg=2 bus=SED_CH7893_LV conn=wye kv=0.4 kva=75.0 %r=1

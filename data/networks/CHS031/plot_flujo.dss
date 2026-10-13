@@ -1,0 +1,16 @@
+! Comandos de visualizacion de FLUJO DE POTENCIA para pegar en la consola
+! de OpenDSS (app de escritorio), luego de compilar output/CHS031_Master.dss.
+! El grosor de cada linea es proporcional a la potencia (kW) que fluye por
+! ella. Demanda pico del caso base ~4604.7 kW (ver Plan_CHS031_v2.md), asi
+! que Max=500 o Max=1000 hace mas visible la variacion entre tramos troncal/
+! derivacion/ramal que Max=2000 (donde casi todo se ve delgado).
+
+Set markTransformers=yes
+Set normvminpu=0.95
+Set normvmaxpu=1.05
+
+Plot Circuit Power Max=1000 dots=n labels=n subs=n
+
+! Alternativas para comparar escala (ejecutar una a la vez):
+! Plot Circuit Power Max=500 dots=n labels=n subs=n
+! Plot Circuit Power Max=2000 dots=n labels=n subs=n
