@@ -26,11 +26,27 @@ hosting capacity indicators — not a single number.
 
 - **Python** 3.9 or later
 - **OpenDSS** installed on Windows (`py_dss_interface` wraps the OpenDSS COM engine)
-- Python packages:
 
-```
+## Installation
+
+Create and activate the virtual environment, then install dependencies:
+
+```bash
+# Create the virtual environment (only once)
+python -m venv .venv
+
+# Activate it
+# Windows:
+.venv\Scripts\activate
+# macOS / Linux:
+source .venv/bin/activate
+
+# Install dependencies
 pip install -r requirements.txt
 ```
+
+All subsequent commands (`python main.py`, `python verify.py`, etc.) should be
+run with the virtual environment active.
 
 `requirements.txt` contains: `numpy`, `pandas`, `matplotlib`, `py-dss-interface`
 
