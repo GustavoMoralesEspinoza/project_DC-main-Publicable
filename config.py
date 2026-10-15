@@ -40,6 +40,27 @@ NETWORK_NAME    = "18Bus"       # Options: "18Bus" | "18Bus_Mod" | "CHS031"
 NETWORK_FILE    = "master.dss"  # Options: "master.dss" (18Bus/18Bus_Mod) | "CHS031_Master.dss" (CHS031)
 TRANSFORMER_MVA = 60           # Options:  60 (18Bus / 18Bus_Mod)  |  7.2 (CHS031)
 
+# Scenario file naming mode:
+#   "replace" — single shared files (cenario_PV.dss, cenario_BESS.dss, ...)
+#               overwritten each iteration. Default, compatible with all tools.
+#   "full"    — one file per iteration (cenario_PV_pen050_seed1001.dss, ...)
+#               stored in data/networks/<network>/cenarios/ subfolder.
+#               Required for parallel execution (eliminates file write conflicts).
+SCENARIO_MODE = "replace"   # Options: "replace" | "full"
+
+# Only relevant in SCENARIO_MODE = "full":
+#   True  → delete all files in cenarios/ at the start of each run (clean slate)
+#   False → keep files from previous runs (useful for debugging/auditing)
+KEEP_SCENARIO_FILES = False
+
+# Parallel execution — requires SCENARIO_MODE = "full"
+#   ENABLE_PARALLEL: set True to distribute iterations across CPU cores.
+#   NUM_WORKERS: number of parallel worker processes.
+#     None  → uses os.cpu_count() (all available cores)
+#     N     → use N cores. Recommended: os.cpu_count() - 1 to keep one core free.
+ENABLE_PARALLEL = False
+NUM_WORKERS     = None
+
 # =============================================================================
 # 3. PATHS  —  do not edit
 #    All paths are derived automatically from the settings above.
@@ -48,6 +69,7 @@ TRANSFORMER_MVA = 60           # Options:  60 (18Bus / 18Bus_Mod)  |  7.2 (CHS03
 BASE_DIR          = os.path.dirname(os.path.abspath(__file__))
 NETWORK_DIR       = os.path.join(BASE_DIR, "data", "networks", NETWORK_NAME)
 NETWORK_DSS_PATH  = os.path.join(NETWORK_DIR, NETWORK_FILE)
+CENARIOS_DIR      = os.path.join(NETWORK_DIR, "cenarios")
 IRRADIANCE_FILE   = os.path.join(BASE_DIR, "data", "irradiance", "Geracao_Solar.csv")
 BESS_PROFILES_DIR = os.path.join(BASE_DIR, "data", "bess_profiles")
 EV_PROFILES_DIR   = os.path.join(BASE_DIR, "data", "ev_profiles")

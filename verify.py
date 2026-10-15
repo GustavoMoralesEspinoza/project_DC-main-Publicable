@@ -49,11 +49,24 @@ if SEED is not None:
 
 import config as cfg
 
-# --- DSS scenario file paths (auto-generated, overwritten each run) ---
-path_pv   = os.path.join(cfg.NETWORK_DIR, "cenario_PV.dss")
-path_bess = os.path.join(cfg.NETWORK_DIR, "cenario_BESS.dss")
-path_ev   = os.path.join(cfg.NETWORK_DIR, "cenario_EV.dss")
-path_dc   = os.path.join(cfg.NETWORK_DIR, "cenario_DC.dss")
+# --- DSS scenario file paths ---
+cenarios_dir = cfg.CENARIOS_DIR
+os.makedirs(cenarios_dir, exist_ok=True)
+
+if cfg.SCENARIO_MODE == "full":
+    path_pv   = os.path.join(cenarios_dir,
+        f"cenario_PV_pen{int(round(PEN_PV)):03d}_seed{SEED}.dss")
+    path_bess = os.path.join(cenarios_dir,
+        f"cenario_BESS_pen{int(round(PEN_BESS)):03d}_seed{SEED}.dss")
+    path_ev   = os.path.join(cenarios_dir,
+        f"cenario_EV_pen{int(round(PEN_EV)):03d}_seed{SEED}.dss")
+    path_dc   = os.path.join(cenarios_dir,
+        f"cenario_DC_pen{int(round(PEN_DC)):03d}_seed{SEED}.dss")
+else:  # "replace"
+    path_pv   = os.path.join(cenarios_dir, "cenario_PV.dss")
+    path_bess = os.path.join(cenarios_dir, "cenario_BESS.dss")
+    path_ev   = os.path.join(cenarios_dir, "cenario_EV.dss")
+    path_dc   = os.path.join(cenarios_dir, "cenario_DC.dss")
 
 for path in [path_pv, path_bess, path_ev, path_dc]:
     if not os.path.exists(path):
