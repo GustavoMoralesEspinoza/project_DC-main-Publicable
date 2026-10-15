@@ -1,0 +1,5 @@
+! DU_1_Circuito_391_CSO_RCSO1307
+New "circuit.RCSO1307" basekv=13.8 bus1="busA" r1=0 x1=0.00001 
+New "Transformer.REG_busA" phases=3 windings=2 buses=["busA" "MT8565062ID"] conns=[Wye Wye] kvs=[13.8 13.8] kvas=[15000.0 15000.0] %loadloss=0.0001 %noloadloss=0.0001 
+New "Regcontrol.CREG_busA" transformer="REG_busA" winding=2 vreg=79.67 band=1 ptratio=100
+

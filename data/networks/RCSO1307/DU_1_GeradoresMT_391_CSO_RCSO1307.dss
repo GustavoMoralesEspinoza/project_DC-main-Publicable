@@ -1,0 +1,68 @@
+! DU_1_GeradoresMT_391_CSO_RCSO1307
+
+New PVsystem.GD_01 phases=3  bus1= MT3907732839708513CS07 kv=13.8 pf=1 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta  
+New PVsystem.GD_02 phases=3  bus1= MT388312539712989CS07 kv=13.8 pf=1 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta  
+New PVsystem.GD_03 phases=3  bus1= MT3894295739775134CS07 kv=13.8 pf=1 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta  
+New PVsystem.GD_04 phases=3  bus1= MT3896152639664416CS07 kv=13.8 pf=1 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta  
+New PVsystem.GD_05 phases=3  bus1= MT3893755639739962CS07 kv=13.8 pf=1 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta  
+New PVsystem.GD_06 phases=3  bus1= MT3896428639584618CS07 kv=13.8 pf=1 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta  
+New PVsystem.GD_07 phases=3  bus1= MT3908531139653553CS07 kv=13.8 pf=1 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta  
+New PVsystem.GD_08 phases=3  bus1= MT3901449439720683CS07 kv=13.8 pf=1 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta  
+New PVsystem.GD_09 phases=3  bus1= MT3896896139340438CS07 kv=13.8 pf=1 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta  
+New PVsystem.GD_10 phases=3  bus1= MT3905163539744187CS07 kv=13.8 pf=1 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_11 phases=3  bus1= MT3895911139350886CS07 kv=13.8 pf=1 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_12 phases=3  bus1= MT3907766639307505CS07 kv=13.8 pf=1 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_13 phases=3  bus1= MT3923475139670783CS07 kv=13.8 pf=1 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_14 phases=3  bus1= MT3891112239545892CS07 kv=13.8 pf=1 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_15 phases=3  bus1= MT3893721239825469CS07 kv=13.8 pf=1 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_16 phases=3  bus1= MT3890244139397285CS07 kv=13.8 pf=1 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_17 phases=3  bus1= MT3910030639627765CS07 kv=13.8 pf=1 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_18 phases=3  bus1= MT3909401539548787CS07 kv=13.8 pf=1 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_19 phases=3  bus1= MT3904620339875845CS07 kv=13.8 pf=1 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_20 phases=3  bus1= MT3934740539519569CS07 kv=13.8 pf=1 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_21 phases=3  bus1= MT3934465139529256CS07 kv=13.8 pf=-0.98 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_22 phases=3  bus1= MT392904673953197CS07 kv=13.8 pf=-0.98 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_23 phases=3  bus1= MT3930231839322092CS07 kv=13.8 pf=-0.98 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_24 phases=3  bus1= MT3936019139320968CS07 kv=13.8 pf=-0.98 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_25 phases=3  bus1= MT3922372339515195CS07 kv=13.8 pf=-0.98 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_26 phases=3  bus1= MT3940072839366717CS07 kv=13.8 pf=-0.98 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_27 phases=3  bus1= MT39310623936411CS07 kv=13.8 pf=-0.98 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_28 phases=3  bus1= MT3933603439505251CS07 kv=13.8 pf=-0.98 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_29 phases=3  bus1= MT3940329939532284CS07 kv=13.8 pf=-0.98 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_30 phases=3  bus1= MT3934137539653017CS07 kv=13.8 pf=-0.98 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_31 phases=3  bus1= MT3934896439365854CS07 kv=13.8 pf=-0.98 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_32 phases=3  bus1= MT3935909239366577CS07 kv=13.8 pf=-0.98 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_33 phases=3  bus1= MT394049739361278CS07 kv=13.8 pf=-0.98 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_34 phases=3  bus1= MT3940409539700333CS07 kv=13.8 pf=-0.98 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_35 phases=3  bus1= MT3937137539351772CS07 kv=13.8 pf=-0.98 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_36 phases=3  bus1= MT3942245139309833CS07 kv=13.8 pf=-0.98 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_37 phases=3  bus1= MT3938810739326476CS07 kv=13.8 pf=-0.98 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_38 phases=3  bus1= MT3937802139448113CS07 kv=13.8 pf=-0.98 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_39 phases=3  bus1= MT3933854139675545CS07 kv=13.8 pf=-0.98 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_40 phases=3  bus1= MT3932022339374888CS07 kv=13.8 pf=-0.98 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_41 phases=3  bus1= MT3943563439327359CS07 kv=13.8 pf=-0.97 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_42 phases=3  bus1= MT3944677239697674CS07 kv=13.8 pf=-0.97 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_43 phases=3  bus1= MT3942492439336297CS07 kv=13.8 pf=-0.97 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_44 phases=3  bus1= MT3944118839273263CS07 kv=13.8 pf=-0.97 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_45 phases=3  bus1= MT3952853339655315CS07 kv=13.8 pf=-0.97 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_46 phases=3  bus1= MT3947630839691386CS07 kv=13.8 pf=-0.97 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_47 phases=3  bus1= MT3939071939394515CS07 kv=13.8 pf=-0.97 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_48 phases=3  bus1= MT3955095739637081CS07 kv=13.8 pf=-0.97 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_49 phases=3  bus1= MT3939010539306113CS07 kv=13.8 pf=-0.97 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+New PVsystem.GD_50 phases=3  bus1= MT3942289539696334CS07 kv=13.8 pf=-0.97 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta  
+New PVsystem.GD_51 phases=3  bus1= MT3942275439669959CS07 kv=13.8 pf=-0.97 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta  
+New PVsystem.GD_52 phases=3  bus1= MT394070913933796CS07 kv=13.8 pf=-0.97 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta  
+New PVsystem.GD_53 phases=3  bus1= MT3940757739318271CS07 kv=13.8 pf=-0.97 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta  
+New PVsystem.GD_54 phases=3  bus1= MT3960292339623187CS07 kv=13.8 pf=-0.97 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta  
+New PVsystem.GD_55 phases=3  bus1= MT3965005739669967CS07 kv=13.8 pf=-0.97 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta   
+New PVsystem.GD_56 phases=3  bus1= MT3965457439700774CS07 kv=13.8 pf=-0.97 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta  
+New PVsystem.GD_57 phases=3  bus1= MT3962293939651153CS07 kv=13.8 pf=-0.97 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta  
+New PVsystem.GD_58 phases=3  bus1= MT3941378539313265CS07 kv=13.8 pf=-0.97 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta  
+New PVsystem.GD_59 phases=3  bus1= MT396659539674246CS07 kv=13.8 pf=-0.97 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta  
+New PVsystem.GD_60 phases=3  bus1= MT394330739340547CS07 kv=13.8 pf=-0.97 kva=325 pmpp=250 irradiance=1 temperature=25 %cutin=0.1 %cutout=0.1 Daily=PVIrrad_diaria conn=Delta
+
+
+
+! New XYCurve.SmartInv0 npts=4 xarray=[0.93 1 1.02 1.04] yarray=[0 0 -0.3 -0.3] 
+! New InvControl.InvPVCtrl mode=VOLTVAR voltage_curvex_ref=rated vvc_curve1=SmartInv0 RefReactivePower=1000
+

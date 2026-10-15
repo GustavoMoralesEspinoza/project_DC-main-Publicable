@@ -1,0 +1,7 @@
+! DU_1_CargasMT_391_CSO_RCSO1307
+New "Load.MT_2359af5c3be8c543a7ed0717c7faf8f8c26205f5187794a73485274c7c9cf44d_M1" bus1="MT3891555839461884CS07.1.2.3" phases=3 conn=Delta model=2 kv=13.8 kw=71.2629439 pf=0.92 daily="MT-TIPO9_DU" status=variable vmaxpu=1.5 vminpu=0.93
+New "Load.MT_2359af5c3be8c543a7ed0717c7faf8f8c26205f5187794a73485274c7c9cf44d_M2" bus1="MT3891555839461884CS07.1.2.3" phases=3 conn=Delta model=3 kv=13.8 kw=71.2629439 pf=0.92 daily="MT-TIPO9_DU" status=variable vmaxpu=1.5 vminpu=0.93
+New "Load.MT_a24259b1f50358a3c30c0d06866ac1dad3285246f3b581ca80958d5941ee6f82_M1" bus1="MT3935885339367093CS07.1.2.3" phases=3 conn=Delta model=2 kv=13.8 kw=59.7019552 pf=0.92 daily="MT-TIPO9_DU" status=variable vmaxpu=1.5 vminpu=0.93
+New "Load.MT_a24259b1f50358a3c30c0d06866ac1dad3285246f3b581ca80958d5941ee6f82_M2" bus1="MT3935885339367093CS07.1.2.3" phases=3 conn=Delta model=3 kv=13.8 kw=59.7019552 pf=0.92 daily="MT-TIPO9_DU" status=variable vmaxpu=1.5 vminpu=0.93
+!New "Load.MT_ea307903c562fb072b66db6b6f3d3e8e26e25946cfdddf2f44bf0f2549e438d0_M1" bus1="MT3940704839295271CS07.1.2.3" phases=3 conn=Delta model=2 kv=13.8 kw=0.0000000 pf=0.92 daily="MT-TIPO9_DU" status=variable vmaxpu=1.5 vminpu=0.93
+!New "Load.MT_ea307903c562fb072b66db6b6f3d3e8e26e25946cfdddf2f44bf0f2549e438d0_M2" bus1="MT3940704839295271CS07.1.2.3" phases=3 conn=Delta model=3 kv=13.8 kw=0.0000000 pf=0.92 daily="MT-TIPO9_DU" status=variable vmaxpu=1.5 vminpu=0.93

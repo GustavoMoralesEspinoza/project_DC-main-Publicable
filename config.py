@@ -36,9 +36,9 @@ ENABLE_DC    = False   # Data centers            (Load elements in OpenDSS)
 #    it is used to compute per-unit transformer loading in results.
 # =============================================================================
 
-NETWORK_NAME    = "18Bus"       # Options: "18Bus" | "18Bus_Mod" | "CHS031"
-NETWORK_FILE    = "master.dss"  # Options: "master.dss" (18Bus/18Bus_Mod) | "CHS031_Master.dss" (CHS031)
-TRANSFORMER_MVA = 60           # Options:  60 (18Bus / 18Bus_Mod)  |  7.2 (CHS031)
+NETWORK_NAME    = "RCSO1307"                         # Options: "18Bus" | "18Bus_Mod" | "CHS031" | "RCSO1307"
+NETWORK_FILE    = "DU_1_Master_391_CSO_RCSO1307.dss"  # Options: "master.dss" (18Bus/18Bus_Mod) | "CHS031_Master.dss" | "DU_1_Master_391_CSO_RCSO1307.dss"
+TRANSFORMER_MVA = 15.0                               # Options:  7.2 (18Bus/18Bus_Mod)  |  60.0 (CHS031)  |  15.0 (RCSO1307)
 
 # Scenario file naming mode:
 #   "replace" — single shared files (cenario_PV.dss, cenario_BESS.dss, ...)
@@ -46,7 +46,7 @@ TRANSFORMER_MVA = 60           # Options:  60 (18Bus / 18Bus_Mod)  |  7.2 (CHS03
 #   "full"    — one file per iteration (cenario_PV_pen050_seed1001.dss, ...)
 #               stored in data/networks/<network>/cenarios/ subfolder.
 #               Required for parallel execution (eliminates file write conflicts).
-SCENARIO_MODE = "replace"   # Options: "replace" | "full"
+SCENARIO_MODE = "full"   # Options: "replace" | "full"
 
 # Only relevant in SCENARIO_MODE = "full":
 #   True  → delete all files in cenarios/ at the start of each run (clean slate)
@@ -58,8 +58,8 @@ KEEP_SCENARIO_FILES = False
 #   NUM_WORKERS: number of parallel worker processes.
 #     None  → uses os.cpu_count() (all available cores)
 #     N     → use N cores. Recommended: os.cpu_count() - 1 to keep one core free.
-ENABLE_PARALLEL = False
-NUM_WORKERS     = None
+ENABLE_PARALLEL = True
+NUM_WORKERS     = 10
 
 # =============================================================================
 # 3. PATHS  —  do not edit
@@ -83,7 +83,7 @@ RESULTS_DIR       = os.path.join(BASE_DIR, "results")
 # Number of random iterations per penetration level.
 # Higher values give smoother statistical distributions but longer runtimes.
 # Recommended: 10 (quick test) | 30 (standard) | 100+ (publication quality)
-NUM_ITERATIONS = 10
+NUM_ITERATIONS = 5000
 
 # Global random seed for full reproducibility across runs.
 # Set to None to use a different random draw every time.
@@ -103,7 +103,7 @@ ONLY_THREE_PHASE = True
 #    Example with multiple exclusions: ["sourcebus", "bus1", "bus18"]
 # =============================================================================
 
-EXCLUDED_BUSES = ["sourcebus"]
+EXCLUDED_BUSES = ["busA"]   # RCSO1307 source bus. Use ["sourcebus"] for 18Bus/CHS031.
 
 # =============================================================================
 # 6. PENETRATION SWEEP  —  PV levels [% of daily network energy]

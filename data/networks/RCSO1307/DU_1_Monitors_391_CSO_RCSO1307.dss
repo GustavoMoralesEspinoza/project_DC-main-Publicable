@@ -1,0 +1,7 @@
+! DU_1_Monitors_391_CSO_RCSO1307
+New "Energymeter.Medidor_SEGMMT_SMT_138633002_B" element="Line.SMT_138633002_B" terminal=1
+New "monitor.SEGMMT_SMT_138633002_B" element="Line.SMT_138633002_B" terminal=1 mode=1 ppolar=no
+New "Energymeter.Medidor_SEGMMT_SMT_138633003_B" element="Line.SMT_138633003_B" terminal=1
+New "monitor.SEGMMT_SMT_138632755_B" element="Line.SMT_138632755_B" terminal=1 mode=1 ppolar=no
+New "Energymeter.Medidor_CHVMT_CMT_8565461" element="Line.CMT_8565461" terminal=1
+New "monitor.CHVMT_CMT_8565461" element="Line.CMT_8565461" terminal=1 mode=1 ppolar=no

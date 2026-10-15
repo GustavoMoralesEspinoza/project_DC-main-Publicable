@@ -1,0 +1,15 @@
+! DU_1_ReatoresMT_391_CSO_RCSO1307
+
+New "Transformer.REG_150RT005510029A" phases=1 windings=2 buses=["MT3885212239613128CS07.1.0" "MT66797484ID.1.0"] conns=[Wye Wye] kvs=[7.9674 7.9674] kvas=[5000.0 5000.0] xhl=0.5 %loadloss=0.1 %noloadloss=0.030909
+New "Transformer.REG_150RT005510029B" phases=1 windings=2 buses=["MT3885212239613128CS07.2.0" "MT66797484ID.2.0"] conns=[Wye Wye] kvs=[7.9674 7.9674] kvas=[5000.0 5000.0] xhl=0.5 %loadloss=0.1 %noloadloss=0.030909
+New "Transformer.REG_150RT005510029C" phases=1 windings=2 buses=["MT3885212239613128CS07.3.0" "MT66797484ID.3.0"] conns=[Wye Wye] kvs=[7.9674 7.9674] kvas=[5000.0 5000.0] xhl=0.5 %loadloss=0.1 %noloadloss=0.030909
+
+New "Regcontrol.CREG_150RT005510029A" transformer="REG_150RT005510029A" winding=2 vreg=79.67 band=1 ptratio=100
+New "Regcontrol.CREG_150RT005510029B" transformer="REG_150RT005510029B" winding=2 vreg=79.67 band=1 ptratio=100
+New "Regcontrol.CREG_150RT005510029C" transformer="REG_150RT005510029C" winding=2 vreg=79.67 band=1 ptratio=100
+
+! O RV REG_150RT005040759 foi substituído por um trecho
+! Essa linha foi incluida no arquivo DU_1_Trecho
+
+
+

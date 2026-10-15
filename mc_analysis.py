@@ -58,7 +58,7 @@ CSV_FILES = {
 }
 
 # KPI used for the deep-dive figures (Figs 1, 2, 4)
-KPI_PRIMARY = "Energy_Losses"
+KPI_PRIMARY = "Vmax_24h"
 
 # KPIs used in the heatmap (Fig 3), SE_MC (Fig 5), and summary table
 KPI_LIST = [
@@ -74,7 +74,7 @@ KPI_LIST = [
 PENETRATION_FOCUS = 50
 
 # N values to evaluate in mode "single" (auto-capped at available rows per level)
-SUBSAMPLE_SIZES = [10, 30, 50, 100, 200, 500]
+SUBSAMPLE_SIZES = [10, 30, 50, 100, 500, 1000]
 
 # Relative change threshold to declare convergence: 0.02 = 2%
 CONVERGENCE_THRESHOLD = 0.02

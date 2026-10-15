@@ -1,0 +1,37 @@
+! DU_1_Master_391_CSO_RCSO1307
+clear
+
+redirect DU_1_CurvaCarga_391_CSO_RCSO1307.dss
+redirect DU_1_Circuito_391_CSO_RCSO1307.dss
+redirect DU_1_CodCondutores_391_CSO_RCSO1307.dss
+redirect DU_1_ChavesMT_391_CSO_RCSO1307.dss
+redirect DU_1_ReatoresMT_391_CSO_RCSO1307.dss
+redirect DU_1_TrafosMT_391_CSO_RCSO1307.dss
+redirect DU_1_TrechoMT_391_CSO_RCSO1307.dss
+redirect DU_1_CargasMT_391_CSO_RCSO1307.dss
+redirect DU_1_Monitors_391_CSO_RCSO1307.dss
+redirect DU_1_CargasBT_391_CSO_RCSO1307.dss
+!redirect DU_1_GeradoresMT_391_CSO_RCSO1307.dss
+
+
+set voltagebases=(13.8,7.96,0.22,0.12,0.127)
+calcv
+
+set loadmult = 2
+
+set mode=daily
+set tolerance=0.01
+set maxcontroliter=1000
+set maxiterations=1000
+set stepsize=1h ! duracao de cada step
+set number=24 ! cada solve executa 24 steps
+solve
+
+Buscoords buscoords_cso.csv
+
+Set normvmaxpu=1.03
+Set normvminpu=0.96
+
+! plot circuit
+! plot profile
+! plot monitor object=SEGMMT_SMT_138632755_B channels=[1,5,3]
