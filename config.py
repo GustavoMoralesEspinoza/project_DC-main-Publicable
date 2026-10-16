@@ -59,7 +59,7 @@ KEEP_SCENARIO_FILES = False
 #     None  → uses os.cpu_count() (all available cores)
 #     N     → use N cores. Recommended: os.cpu_count() - 1 to keep one core free.
 ENABLE_PARALLEL = True
-NUM_WORKERS     = 10
+NUM_WORKERS     = None
 
 # =============================================================================
 # 3. PATHS  —  do not edit
@@ -88,7 +88,7 @@ NUM_ITERATIONS = 5000
 # Global random seed for full reproducibility across runs.
 # Set to None to use a different random draw every time.
 # Each iteration uses seed = RANDOM_SEED + iteration_counter internally.
-RANDOM_SEED = 1000   # Options: any integer | None (fully random)
+RANDOM_SEED = 1   # Options: any integer | None (fully random)
 
 # If True, only three-phase buses are candidates for DER placement.
 # Recommended True for medium-voltage studies; set False to include
@@ -118,7 +118,8 @@ EXCLUDED_BUSES = ["busA"]   # RCSO1307 source bus. Use ["sourcebus"] for 18Bus/C
 #                       55, 60, 65, 70, 75, 80, 85, 90, 95, 100]
 # =============================================================================
 
-PENETRATION_LEVELS_PV = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+PENETRATION_LEVELS_PV = [20, 50, 70, 100]
+# PENETRATION_LEVELS_PV = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
 
 # =============================================================================
 # 7. DER PENETRATION RATIOS  —  relative to PV level
