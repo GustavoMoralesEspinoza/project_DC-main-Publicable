@@ -1,0 +1,18 @@
+! DU_1_ReatoresMT_391_BRR_RBRR1303
+
+New "Transformer.REG_295RT000020179A" phases=1 windings=2 buses=["MT4476133645319384BR03.3.0" "MT3163519ID.3.0"] conns=[Wye Wye] kvs=[7.9674 7.9674] kvas=[1750.0 1750.0] xhl=0.51 %loadloss=0.135429 %noloadloss=0.032571
+New "Transformer.REG_295RT000020179B" phases=1 windings=2 buses=["MT4476133645319384BR03.1.0" "MT3163519ID.1.0"] conns=[Wye Wye] kvs=[7.9674 7.9674] kvas=[1750.0 1750.0] xhl=0.51 %loadloss=0.135429 %noloadloss=0.032571
+New "Transformer.REG_295RT000020179C" phases=1 windings=2 buses=["MT4476133645319384BR03.2.0" "MT3163519ID.2.0"] conns=[Wye Wye] kvs=[7.9674 7.9674] kvas=[1750.0 1750.0] xhl=0.51 %loadloss=0.135429 %noloadloss=0.032571
+
+!New "Regcontrol.CREG_295RT000020179A" transformer="REG_295RT000020179A" winding=2 vreg=79.67 band=0.1 ptratio=100
+!New "Regcontrol.CREG_295RT000020179B" transformer="REG_295RT000020179B" winding=2 vreg=79.67 band=0.1 ptratio=100
+!New "Regcontrol.CREG_295RT000020179C" transformer="REG_295RT000020179C" winding=2 vreg=79.67 band=0.1 ptratio=100
+
+New "Regcontrol.CREG_295RT000020179A" transformer="REG_295RT000020179A" winding=2 vreg=78 band=0.1 ptratio=100
+New "Regcontrol.CREG_295RT000020179B" transformer="REG_295RT000020179B" winding=2 vreg=78 band=0.1 ptratio=100
+New "Regcontrol.CREG_295RT000020179C" transformer="REG_295RT000020179C" winding=2 vreg=78 band=0.1 ptratio=100
+
+!New "Regcontrol.CREG_295RT000020179A" transformer="REG_295RT000020179A" winding=2 vreg=81.5 band=0.1 ptratio=100
+!New "Regcontrol.CREG_295RT000020179B" transformer="REG_295RT000020179B" winding=2 vreg=81.5 band=0.1 ptratio=100
+!New "Regcontrol.CREG_295RT000020179C" transformer="REG_295RT000020179C" winding=2 vreg=81.5 band=0.1 ptratio=100
+

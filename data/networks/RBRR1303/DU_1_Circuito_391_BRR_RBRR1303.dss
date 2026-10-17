@@ -1,0 +1,2 @@
+! DU_1_Circuito_391_BRR_RBRR1303
+new "circuit.RBRR1303" pu=1.0027 basekv=13.8 bus1="MT8563317ID" r1=0 x1=0.0001

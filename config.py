@@ -36,9 +36,9 @@ ENABLE_DC    = False   # Data centers            (Load elements in OpenDSS)
 #    it is used to compute per-unit transformer loading in results.
 # =============================================================================
 
-NETWORK_NAME    = "RCSO1307"                         # Options: "18Bus" | "18Bus_Mod" | "CHS031" | "RCSO1307"
-NETWORK_FILE    = "DU_1_Master_391_CSO_RCSO1307.dss"  # Options: "master.dss" (18Bus/18Bus_Mod) | "CHS031_Master.dss" | "DU_1_Master_391_CSO_RCSO1307.dss"
-TRANSFORMER_MVA = 15.0                               # Options:  7.2 (18Bus/18Bus_Mod)  |  60.0 (CHS031)  |  15.0 (RCSO1307)
+NETWORK_NAME    = "RBRR1303"                              # Options: "18Bus" | "18Bus_Mod" | "CHS031" | "RCSO1307" | "RBRR1303"
+NETWORK_FILE    = "DU_1_Master_391_BRR_RBRR1303.dss"      # Options: "master.dss" | "CHS031_Master.dss" | "DU_1_Master_391_CSO_RCSO1307.dss" | "DU_1_Master_391_BRR_RBRR1303.dss"
+TRANSFORMER_MVA = 5.25                                    # Options:  7.2 (18Bus/18Bus_Mod)  |  60.0 (CHS031)  |  15.0 (RCSO1307)  |  5.25 (RBRR1303 — 3×1750 kVA regulators)
 
 # Scenario file naming mode:
 #   "replace" — single shared files (cenario_PV.dss, cenario_BESS.dss, ...)
@@ -103,7 +103,7 @@ ONLY_THREE_PHASE = True
 #    Example with multiple exclusions: ["sourcebus", "bus1", "bus18"]
 # =============================================================================
 
-EXCLUDED_BUSES = ["busA"]   # RCSO1307 source bus. Use ["sourcebus"] for 18Bus/CHS031.
+EXCLUDED_BUSES = ["MT8563317ID"]   # RBRR1303 source bus. Use ["busA"] for RCSO1307 | ["sourcebus"] for 18Bus/CHS031.
 
 # =============================================================================
 # 6. PENETRATION SWEEP  —  PV levels [% of daily network energy]

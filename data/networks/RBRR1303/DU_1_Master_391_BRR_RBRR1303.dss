@@ -1,0 +1,31 @@
+! DU_1_Master_391_BRR_RBRR1303
+clear
+
+redirect DU_1_CurvaCarga_391_BRR_RBRR1303.dss
+redirect DU_1_Circuito_391_BRR_RBRR1303.dss
+redirect DU_1_CodCondutores_391_BRR_RBRR1303.dss
+redirect DU_1_ChavesMT_391_BRR_RBRR1303.dss
+redirect DU_1_ReatoresMT_391_BRR_RBRR1303.dss
+redirect DU_1_TrafosMT_391_BRR_RBRR1303.dss
+redirect DU_1_TrechoMT_391_BRR_RBRR1303.dss
+redirect DU_1_CargasMT_391_BRR_RBRR1303.dss
+redirect DU_1_Monitors_391_BRR_RBRR1303.dss
+redirect DU_1_Capacitors_391_BRR_RBRR1303.dss
+redirect DU_1_CargasBT_391_BRR_RBRR1303.dss
+redirect DU_1_GeradoresMT_391_BRR_RBRR1303.dss
+! redirect DU_1_GeradoresBT_391_BRR_RBRR1303.dss
+
+! redirect insercionGD_sin_BESS
+
+set voltagebases=(13.8,7.96,0.22,0.12,0.24,0.127)
+calcv
+set mode=daily
+set tolerance=0.0001
+set maxcontroliter=100
+set maxiterations=100
+set stepsize=1h ! duracao de cada step
+set number=24 ! cada solve executa 24 steps
+solve
+
+Buscoords ../buscoords_brr.csv
+
