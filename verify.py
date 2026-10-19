@@ -50,27 +50,25 @@ if SEED is not None:
 import config as cfg
 
 # --- DSS scenario file paths ---
+# Disabled modules get a None path: no file is created and run_with_ders
+# skips the redirect for that DER. Only enabled modules produce a .dss file.
 cenarios_dir = cfg.CENARIOS_DIR
 os.makedirs(cenarios_dir, exist_ok=True)
 
-if cfg.SCENARIO_MODE == "full":
-    path_pv   = os.path.join(cenarios_dir,
-        f"cenario_PV_pen{int(round(PEN_PV)):03d}_seed{SEED}.dss")
-    path_bess = os.path.join(cenarios_dir,
-        f"cenario_BESS_pen{int(round(PEN_BESS)):03d}_seed{SEED}.dss")
-    path_ev   = os.path.join(cenarios_dir,
-        f"cenario_EV_pen{int(round(PEN_EV)):03d}_seed{SEED}.dss")
-    path_dc   = os.path.join(cenarios_dir,
-        f"cenario_DC_pen{int(round(PEN_DC)):03d}_seed{SEED}.dss")
-else:  # "replace"
-    path_pv   = os.path.join(cenarios_dir, "cenario_PV.dss")
-    path_bess = os.path.join(cenarios_dir, "cenario_BESS.dss")
-    path_ev   = os.path.join(cenarios_dir, "cenario_EV.dss")
-    path_dc   = os.path.join(cenarios_dir, "cenario_DC.dss")
 
-for path in [path_pv, path_bess, path_ev, path_dc]:
-    if not os.path.exists(path):
-        open(path, "w").close()
+def _scenario_path(der, pen, enabled):
+    if not enabled:
+        return None
+    if cfg.SCENARIO_MODE == "full":
+        return os.path.join(cenarios_dir,
+            f"cenario_{der}_pen{int(round(pen)):03d}_seed{SEED}.dss")
+    return os.path.join(cenarios_dir, f"cenario_{der}.dss")
+
+
+path_pv   = _scenario_path("PV",   PEN_PV,   ENABLE_PV)
+path_bess = _scenario_path("BESS", PEN_BESS, ENABLE_BESS)
+path_ev   = _scenario_path("EV",   PEN_EV,   ENABLE_EV_CS)
+path_dc   = _scenario_path("DC",   PEN_DC,   ENABLE_DC)
 
 # =============================================================================
 # 1. BASE CASE  â€”  load network and compute daily energy reference
@@ -110,8 +108,6 @@ if ENABLE_PV and PEN_PV > 0:
         cfg.PV_POWER_FACTOR,
     )
     generate_cenario_pv(pv_units, irrad_pu, temp_c, path_pv, PEN_PV, month)
-else:
-    open(path_pv, "w").close()
 
 # --- BESS ---
 bess_units   = []
@@ -135,8 +131,6 @@ if ENABLE_BESS and PEN_BESS > 0:
         vminpu=cfg.BESS_VMINPU, vmaxpu=cfg.BESS_VMAXPU,
         eff_charge=cfg.BESS_EFF_CHARGE, eff_discharge=cfg.BESS_EFF_DISCHARGE,
     )
-else:
-    open(path_bess, "w").close()
 
 # --- EV/CS ---
 ev_units   = []
@@ -155,8 +149,6 @@ if ENABLE_EV_CS and PEN_EV > 0:
         cfg.EV_POWER_FACTOR,
     )
     generate_cenario_ev(ev_units, path_ev, PEN_EV)
-else:
-    open(path_ev, "w").close()
 
 # --- DC ---
 dc_units   = []
@@ -183,8 +175,6 @@ if ENABLE_DC and PEN_DC > 0:
         dc_self_supply_frac=cfg.DC_SELF_SUPPLY_FRAC,
         dc_gen_profile=dc_gen_profile,
     )
-else:
-    open(path_dc, "w").close()
 
 # =============================================================================
 # 3. SIMULATION WITH DERs
@@ -262,10 +252,12 @@ print(f"    Peak transformer load : {float(np.max(sim['perfil_trafo'])):>10.1f} 
 print(f"\n  Generated DSS files")
 for label, path in [("PV", path_pv), ("BESS", path_bess),
                     ("EV/CS", path_ev), ("DC", path_dc)]:
+    if path is None:
+        print(f"    {label:<6}: (module disabled, no file)")
+        continue
     rel = os.path.relpath(path, cfg.BASE_DIR).replace("\\", "/")
     size = os.path.getsize(path)
-    status = f"{size:,} B" if size > 0 else "empty (module disabled)"
-    print(f"    {label:<6}: {rel}  [{status}]")
+    print(f"    {label:<6}: {rel}  [{size:,} B]")
 
 print(SEP)
 

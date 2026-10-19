@@ -63,26 +63,27 @@ def _merge_hourly_files(iter_dir, hourly_dir):
     print(f"  Hourly merge: {len(all_files)} iteration files -> 5 consolidated CSVs")
 
 
-def _build_cenario_paths(cenarios_dir, pen_pv, pen_bess, pen_ev, pen_dc, seed_it, mode):
-    """Returns (path_pv, path_bess, path_ev, path_dc) for the given mode."""
-    if mode == "full":
-        return (
-            os.path.join(cenarios_dir,
-                f"cenario_PV_pen{int(round(pen_pv)):03d}_seed{seed_it}.dss"),
-            os.path.join(cenarios_dir,
-                f"cenario_BESS_pen{int(round(pen_bess)):03d}_seed{seed_it}.dss"),
-            os.path.join(cenarios_dir,
-                f"cenario_EV_pen{int(round(pen_ev)):03d}_seed{seed_it}.dss"),
-            os.path.join(cenarios_dir,
-                f"cenario_DC_pen{int(round(pen_dc)):03d}_seed{seed_it}.dss"),
-        )
-    else:  # replace
-        return (
-            os.path.join(cenarios_dir, "cenario_PV.dss"),
-            os.path.join(cenarios_dir, "cenario_BESS.dss"),
-            os.path.join(cenarios_dir, "cenario_EV.dss"),
-            os.path.join(cenarios_dir, "cenario_DC.dss"),
-        )
+def _build_cenario_paths(cenarios_dir, pen_pv, pen_bess, pen_ev, pen_dc, seed_it, mode,
+                         enable_pv=True, enable_bess=True, enable_ev=True, enable_dc=True):
+    """
+    Returns (path_pv, path_bess, path_ev, path_dc) for the given mode.
+    Returns None for any DER module that is disabled — no file is created
+    and run_with_ders will skip the redirect for that module.
+    """
+    def _p(der, pen, enabled):
+        if not enabled:
+            return None
+        if mode == "full":
+            return os.path.join(cenarios_dir,
+                f"cenario_{der}_pen{int(round(pen)):03d}_seed{seed_it}.dss")
+        return os.path.join(cenarios_dir, f"cenario_{der}.dss")
+
+    return (
+        _p("PV",   pen_pv,   enable_pv),
+        _p("BESS", pen_bess, enable_bess),
+        _p("EV",   pen_ev,   enable_ev),
+        _p("DC",   pen_dc,   enable_dc),
+    )
 
 
 def _cfg_to_namespace(cfg):
@@ -152,7 +153,9 @@ def _run_single_iteration(task):
     n_mt_total = base["n_mt_total"]
 
     path_pv, path_bess, path_ev, path_dc = _build_cenario_paths(
-        cenarios_dir, pen_pv, pen_bess, pen_ev, pen_dc, seed_it, "full"
+        cenarios_dir, pen_pv, pen_bess, pen_ev, pen_dc, seed_it, "full",
+        enable_pv=cfg_ns.ENABLE_PV, enable_bess=cfg_ns.ENABLE_BESS,
+        enable_ev=cfg_ns.ENABLE_EV_CS, enable_dc=cfg_ns.ENABLE_DC,
     )
 
     # --- PV ---
@@ -169,8 +172,6 @@ def _run_single_iteration(task):
             cfg_ns.PV_SIZES_KW, cfg_ns.PV_PROBS, cfg_ns.PV_POWER_FACTOR,
         )
         generate_cenario_pv(pv_units, irrad_pu, temp_c, path_pv, pen_pv, mes)
-    else:
-        open(path_pv, "w").close()
 
     # --- BESS ---
     bess_units = []
@@ -192,8 +193,6 @@ def _run_single_iteration(task):
             vminpu=cfg_ns.BESS_VMINPU, vmaxpu=cfg_ns.BESS_VMAXPU,
             eff_charge=cfg_ns.BESS_EFF_CHARGE, eff_discharge=cfg_ns.BESS_EFF_DISCHARGE,
         )
-    else:
-        open(path_bess, "w").close()
 
     # --- EV/CS ---
     ev_units = []
@@ -209,8 +208,6 @@ def _run_single_iteration(task):
             ev_profiles, ev_profile_names, cfg_ns.EV_POWER_FACTOR,
         )
         generate_cenario_ev(ev_units, path_ev, pen_ev)
-    else:
-        open(path_ev, "w").close()
 
     # --- DC ---
     dc_units = []
@@ -232,8 +229,6 @@ def _run_single_iteration(task):
             dc_self_supply_frac=cfg_ns.DC_SELF_SUPPLY_FRAC,
             dc_gen_profile=dc_gen_profile,
         )
-    else:
-        open(path_dc, "w").close()
 
     # --- Simulate ---
     sim = run_with_ders(
@@ -369,9 +364,11 @@ def run_monte_carlo(cfg):
     # replace mode: create fixed-path placeholders once
     if cfg.SCENARIO_MODE == "replace":
         path_pv, path_bess, path_ev, path_dc = _build_cenario_paths(
-            cenarios_dir, 0, 0, 0, 0, 0, "replace"
+            cenarios_dir, 0, 0, 0, 0, 0, "replace",
+            enable_pv=cfg.ENABLE_PV, enable_bess=cfg.ENABLE_BESS,
+            enable_ev=cfg.ENABLE_EV_CS, enable_dc=cfg.ENABLE_DC,
         )
-        for path in [path_pv, path_bess, path_ev, path_dc]:
+        for path in [p for p in [path_pv, path_bess, path_ev, path_dc] if p is not None]:
             if not os.path.exists(path):
                 open(path, "w").close()
 
@@ -504,7 +501,9 @@ def run_monte_carlo(cfg):
             # Paths (replace: already set; full: compute per iteration)
             if cfg.SCENARIO_MODE == "full":
                 path_pv, path_bess, path_ev, path_dc = _build_cenario_paths(
-                    cenarios_dir, pen_pv, pen_bess, pen_ev, pen_dc, seed_it, "full"
+                    cenarios_dir, pen_pv, pen_bess, pen_ev, pen_dc, seed_it, "full",
+                    enable_pv=cfg.ENABLE_PV, enable_bess=cfg.ENABLE_BESS,
+                    enable_ev=cfg.ENABLE_EV_CS, enable_dc=cfg.ENABLE_DC,
                 )
 
             # --- Base case ---
@@ -528,8 +527,6 @@ def run_monte_carlo(cfg):
                     cfg.PV_SIZES_KW, cfg.PV_PROBS, cfg.PV_POWER_FACTOR,
                 )
                 generate_cenario_pv(pv_units, irrad_pu, temp_c, path_pv, pen_pv, mes)
-            else:
-                open(path_pv, "w").close()
 
             # --- BESS ---
             bess_units = []
@@ -547,8 +544,6 @@ def run_monte_carlo(cfg):
                     vminpu=cfg.BESS_VMINPU, vmaxpu=cfg.BESS_VMAXPU,
                     eff_charge=cfg.BESS_EFF_CHARGE, eff_discharge=cfg.BESS_EFF_DISCHARGE,
                 )
-            else:
-                open(path_bess, "w").close()
 
             # --- EV/CS ---
             ev_units = []
@@ -560,8 +555,6 @@ def run_monte_carlo(cfg):
                     ev_profiles, ev_profile_names, cfg.EV_POWER_FACTOR,
                 )
                 generate_cenario_ev(ev_units, path_ev, pen_ev)
-            else:
-                open(path_ev, "w").close()
 
             # --- DC ---
             dc_units = []
@@ -579,8 +572,6 @@ def run_monte_carlo(cfg):
                     dc_self_supply_frac=cfg.DC_SELF_SUPPLY_FRAC,
                     dc_gen_profile=dc_gen_profile,
                 )
-            else:
-                open(path_dc, "w").close()
 
             # --- Simulate ---
             sim = run_with_ders(

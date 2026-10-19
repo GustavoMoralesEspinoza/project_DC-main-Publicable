@@ -27,5 +27,5 @@ set stepsize=1h ! duracao de cada step
 set number=24 ! cada solve executa 24 steps
 solve
 
-Buscoords ../buscoords_brr.csv
+! Buscoords ../buscoords_brr.csv
 
