@@ -1,0 +1,129 @@
+Clear
+
+New object=circuit.arquivodss2
+
+~ basekv=13.8 pu=1.025 angle=0 //mvasc3=976 mvasc1=767 x1r1=8.33 x0r0=4.02
+
+New Line.L_SE_51_B1   Phases=3 Bus1=sourcebus.1.2.3 Bus2=B1.1.2.3   length = 0.562   r1 = 0.1932 x1 = 0.2279 r0 = 0.1932 x0 = 0.2279 c1 = 0 c0 = 0 units = km  normamps = 300.0    
+New Line.L_B3_B4   Phases=3 Bus1=B3.1.2.3 Bus2=B4.1.2.3   length = 0.624   r1 = 0.3655 x1 = 0.252 r0 = 0.3655 x0 = 0.252 c1 = 0 c0 = 0 units = km  normamps = 150.0    
+New Line.L_B4_B7   Phases=3 Bus1=B4.1.2.3 Bus2=B7.1.2.3   length = 0.5   r1 = 0.1932 x1 = 0.2279 r0 = 0.1932 x0 = 0.2279 c1 = 0 c0 = 0 units = km  normamps = 300.0    
+New Line.L_B4_B5   Phases=3 Bus1=B4.1.2.3 Bus2=B5.1.2.3   length = 0.624   r1 = 0.3655 x1 = 0.252 r0 = 0.3655 x0 = 0.252 c1 = 0 c0 = 0 units = km  normamps = 150.0    
+New Line.L_B7_B8   Phases=3 Bus1=B7.1.2.3 Bus2=B8.1.2.3   length = 0.624   r1 = 0.2921 x1 = 0.2466 r0 = 0.2921 x0 = 0.2466 c1 = 0 c0 = 0 units = km  normamps = 200.0    
+New Line.L_B15_B16   Phases=3 Bus1=B15.1.2.3 Bus2=B16.1.2.3   length = 0.5   r1 = 0.2921 x1 = 0.2466 r0 = 0.2921 x0 = 0.2466 c1 = 0 c0 = 0 units = km  normamps = 200.0    
+New Line.L_B5_B6   Phases=3 Bus1=B5.1.2.3 Bus2=B6.1.2.3   length = 0.624   r1 = 0.3655 x1 = 0.252 r0 = 0.3655 x0 = 0.252 c1 = 0 c0 = 0 units = km  normamps = 150.0    
+New Line.L_B1_B2   Phases=3 Bus1=B1.1.2.3 Bus2=B2.1.2.3   length = 0.75   r1 = 0.2359 x1 = 0.2402 r0 = 0.2359 x0 = 0.2402 c1 = 0 c0 = 0 units = km  normamps = 250.0    
+New Line.L_B9_B10   Phases=3 Bus1=B9.1.2.3 Bus2=B10.1.2.3   length = 0.75   r1 = 0.1932 x1 = 0.2279 r0 = 0.1932 x0 = 0.2279 c1 = 0 c0 = 0 units = km  normamps = 300.0    
+New Line.L_SE_52_B14   Phases=3 Bus1=sourcebus.1.2.3 Bus2=B14.1.2.3   length = 0.562   r1 = 0.1932 x1 = 0.2279 r0 = 0.1932 x0 = 0.2279 c1 = 0 c0 = 0 units = km  normamps = 300.0    
+New Line.L_B14_B15   Phases=3 Bus1=B14.1.2.3 Bus2=B15.1.2.3   length = 0.562   r1 = 0.2921 x1 = 0.2466 r0 = 0.2921 x0 = 0.2466 c1 = 0 c0 = 0 units = km  normamps = 200.0    
+New Line.L_B11_B12   Phases=3 Bus1=B11.1.2.3 Bus2=B12.1.2.3   length = 0.624   r1 = 0.2921 x1 = 0.2466 r0 = 0.2921 x0 = 0.2466 c1 = 0 c0 = 0 units = km  normamps = 200.0    
+New Line.L_B12_B13   Phases=3 Bus1=B12.1.2.3 Bus2=B13.1.2.3   length = 0.874   r1 = 0.3655 x1 = 0.252 r0 = 0.3655 x0 = 0.252 c1 = 0 c0 = 0 units = km  normamps = 150.0    
+New Line.L_B19_B20   Phases=3 Bus1=B19.1.2.3 Bus2=B20.1.2.3   length = 0.624   r1 = 0.3655 x1 = 0.252 r0 = 0.3655 x0 = 0.252 c1 = 0 c0 = 0 units = km  normamps = 150.0    
+New Line.L_B18_B19   Phases=3 Bus1=B18.1.2.3 Bus2=B19.1.2.3   length = 0.5   r1 = 0.3655 x1 = 0.252 r0 = 0.3655 x0 = 0.252 c1 = 0 c0 = 0 units = km  normamps = 150.0    
+New Line.L_B17_B18   Phases=3 Bus1=B17.1.2.3 Bus2=B18.1.2.3   length = 0.812   r1 = 0.1932 x1 = 0.2279 r0 = 0.1932 x0 = 0.2279 c1 = 0 c0 = 0 units = km  normamps = 300.0    
+New Line.L_B9_B17   Phases=3 Bus1=B9.1.2.3 Bus2=B17.1.2.3   length = 0.86   r1 = 0.2359 x1 = 0.2402 r0 = 0.2359 x0 = 0.2402 c1 = 0 c0 = 0 units = km  normamps = 250.0    
+New Line.L_B18_B21   Phases=3 Bus1=B18.1.2.3 Bus2=B21.1.2.3   length = 0.624   r1 = 0.1932 x1 = 0.2279 r0 = 0.1932 x0 = 0.2279 c1 = 0 c0 = 0 units = km  normamps = 300.0    
+New Line.L_SE_54_B21   Phases=3 Bus1=sourcebus.1.2.3 Bus2=B21.1.2.3   length = 0.5   r1 = 0.1932 x1 = 0.2279 r0 = 0.1932 x0 = 0.2279 c1 = 0 c0 = 0 units = km  normamps = 300.0    
+New Line.L_SE_54_B22   Phases=3 Bus1=sourcebus.1.2.3 Bus2=B22.1.2.3   length = 0.75   r1 = 0.2921 x1 = 0.2466 r0 = 0.2921 x0 = 0.2466 c1 = 0 c0 = 0 units = km  normamps = 200.0    
+New Line.L_B22_B23   Phases=3 Bus1=B22.1.2.3 Bus2=B23.1.2.3   length = 0.686   r1 = 0.3655 x1 = 0.252 r0 = 0.3655 x0 = 0.252 c1 = 0 c0 = 0 units = km  normamps = 150.0    
+New Line.L_B23_B24   Phases=3 Bus1=B23.1.2.3 Bus2=B24.1.2.3   length = 0.562   r1 = 0.2359 x1 = 0.2402 r0 = 0.2359 x0 = 0.2402 c1 = 0 c0 = 0 units = km  normamps = 250.0    
+New Line.L_B25_B8   Phases=3 Bus1=B25.1.2.3 Bus2=B8.1.2.3   length = 0.562   r1 = 0.2359 x1 = 0.2402 r0 = 0.2359 x0 = 0.2402 c1 = 0 c0 = 0 units = km  normamps = 250.0    
+New Line.L_B8_B27   Phases=3 Bus1=B8.1.2.3 Bus2=B27.1.2.3   length = 0.75   r1 = 0.2359 x1 = 0.2402 r0 = 0.2359 x0 = 0.2402 c1 = 0 c0 = 0 units = km  normamps = 250.0    
+New Line.L_B27_B26   Phases=3 Bus1=B27.1.2.3 Bus2=B26.1.2.3   length = 0.686   r1 = 0.1932 x1 = 0.2279 r0 = 0.1932 x0 = 0.2279 c1 = 0 c0 = 0 units = km  normamps = 300.0    
+New Line.L_B27_B28   Phases=3 Bus1=B27.1.2.3 Bus2=B28.1.2.3   length = 0.624   r1 = 0.2359 x1 = 0.2402 r0 = 0.2359 x0 = 0.2402 c1 = 0 c0 = 0 units = km  normamps = 250.0    
+New Line.L_SE_54_B30   Phases=3 Bus1=sourcebus.1.2.3 Bus2=B30.1.2.3   length = 0.562   r1 = 0.1932 x1 = 0.2279 r0 = 0.1932 x0 = 0.2279 c1 = 0 c0 = 0 units = km  normamps = 300.0    
+New Line.L_B30_B29   Phases=3 Bus1=B30.1.2.3 Bus2=B29.1.2.3   length = 0.624   r1 = 0.2921 x1 = 0.2466 r0 = 0.2921 x0 = 0.2466 c1 = 0 c0 = 0 units = km  normamps = 200.0    
+New Line.L_B43_B37   Phases=3 Bus1=B43.1.2.3 Bus2=B37.1.2.3   length = 0.5   r1 = 0.2359 x1 = 0.2402 r0 = 0.2359 x0 = 0.2402 c1 = 0 c0 = 0 units = km  normamps = 250.0    
+New Line.L_B37_B31   Phases=3 Bus1=B37.1.2.3 Bus2=B31.1.2.3   length = 0.374   r1 = 0.1932 x1 = 0.2279 r0 = 0.1932 x0 = 0.2279 c1 = 0 c0 = 0 units = km  normamps = 300.0    
+New Line.L_B31_B10   Phases=3 Bus1=B31.1.2.3 Bus2=B10.1.2.3   length = 0.624   r1 = 0.3655 x1 = 0.252 r0 = 0.3655 x0 = 0.252 c1 = 0 c0 = 0 units = km  normamps = 150.0    
+New Line.L_B13_B43   Phases=3 Bus1=B13.1.2.3 Bus2=B43.1.2.3   length = 0.75   r1 = 0.2359 x1 = 0.2402 r0 = 0.2359 x0 = 0.2402 c1 = 0 c0 = 0 units = km  normamps = 250.0    
+New Line.L_B44_B38   Phases=3 Bus1=B44.1.2.3 Bus2=B38.1.2.3   length = 0.5   r1 = 0.0966 x1 = 0.1201 r0 = 0.0966 x0 = 0.1201 c1 = 0 c0 = 0 units = km  normamps = 600.0    
+New Line.L_B38_B39   Phases=3 Bus1=B38.1.2.3 Bus2=B39.1.2.3   length = 0.436   r1 = 0.0966 x1 = 0.1201 r0 = 0.0966 x0 = 0.1201 c1 = 0 c0 = 0 units = km  normamps = 600.0    
+New Line.L_B39_B32   Phases=3 Bus1=B39.1.2.3 Bus2=B32.1.2.3   length = 0.624   r1 = 0.1932 x1 = 0.2279 r0 = 0.1932 x0 = 0.2279 c1 = 0 c0 = 0 units = km  normamps = 300.0    
+New Line.L_B33_B8   Phases=3 Bus1=B33.1.2.3 Bus2=B8.1.2.3   length = 0.812   r1 = 0.2359 x1 = 0.2402 r0 = 0.2359 x0 = 0.2402 c1 = 0 c0 = 0 units = km  normamps = 250.0    
+New Line.L_B34_B35   Phases=3 Bus1=B34.1.2.3 Bus2=B35.1.2.3   length = 0.936   r1 = 0.0966 x1 = 0.1201 r0 = 0.0966 x0 = 0.1201 c1 = 0 c0 = 0 units = km  normamps = 600.0    
+New Line.L_B35_B36   Phases=3 Bus1=B35.1.2.3 Bus2=B36.1.2.3   length = 0.374   r1 = 0.1932 x1 = 0.2279 r0 = 0.1932 x0 = 0.2279 c1 = 0 c0 = 0 units = km  normamps = 300.0    
+New Line.L_SE_53_B36   Phases=3 Bus1=sourcebus.1.2.3 Bus2=B36.1.2.3   length = 0.436   r1 = 0.0966 x1 = 0.1201 r0 = 0.0966 x0 = 0.1201 c1 = 0 c0 = 0 units = km  normamps = 600.0    
+New Line.L_SE_53_B28   Phases=3 Bus1=sourcebus.1.2.3 Bus2=B28.1.2.3   length = 0.436   r1 = 0.1932 x1 = 0.2279 r0 = 0.1932 x0 = 0.2279 c1 = 0 c0 = 0 units = km  normamps = 300.0    
+New Line.L_B41_B40   Phases=3 Bus1=B41.1.2.3 Bus2=B40.1.2.3   length = 0.624   r1 = 0.2921 x1 = 0.2466 r0 = 0.2921 x0 = 0.2466 c1 = 0 c0 = 0 units = km  normamps = 200.0    
+New Line.L_B40_B16   Phases=3 Bus1=B40.1.2.3 Bus2=B16.1.2.3   length = 0.624   r1 = 0.3655 x1 = 0.252 r0 = 0.3655 x0 = 0.252 c1 = 0 c0 = 0 units = km  normamps = 150.0    
+New Line.L_B41_B42   Phases=3 Bus1=B41.1.2.3 Bus2=B42.1.2.3   length = 0.75   r1 = 0.1932 x1 = 0.2279 r0 = 0.1932 x0 = 0.2279 c1 = 0 c0 = 0 units = km  normamps = 300.0    
+New Line.L_B42_B48   Phases=3 Bus1=B42.1.2.3 Bus2=B48.1.2.3   length = 0.5   r1 = 0.1932 x1 = 0.2279 r0 = 0.1932 x0 = 0.2279 c1 = 0 c0 = 0 units = km  normamps = 300.0    
+New Line.L_B48_B49   Phases=3 Bus1=B48.1.2.3 Bus2=B49.1.2.3   length = 0.75   r1 = 0.1932 x1 = 0.2279 r0 = 0.1932 x0 = 0.2279 c1 = 0 c0 = 0 units = km  normamps = 300.0    
+New Line.L_B49_B50   Phases=3 Bus1=B49.1.2.3 Bus2=B50.1.2.3   length = 0.5   r1 = 0.1932 x1 = 0.2279 r0 = 0.1932 x0 = 0.2279 c1 = 0 c0 = 0 units = km  normamps = 300.0    
+New Line.L_B42_B47   Phases=3 Bus1=B42.1.2.3 Bus2=B47.1.2.3   length = 0.75   r1 = 0.3655 x1 = 0.252 r0 = 0.3655 x0 = 0.252 c1 = 0 c0 = 0 units = km  normamps = 150.0    
+New Line.L_B47_B46   Phases=3 Bus1=B47.1.2.3 Bus2=B46.1.2.3   length = 0.436   r1 = 0.0966 x1 = 0.1201 r0 = 0.0966 x0 = 0.1201 c1 = 0 c0 = 0 units = km  normamps = 600.0    
+New Line.L_B12_B45   Phases=3 Bus1=B12.1.2.3 Bus2=B45.1.2.3   length = 0.624   r1 = 0.1932 x1 = 0.2279 r0 = 0.1932 x0 = 0.2279 c1 = 0 c0 = 0 units = km  normamps = 300.0    
+New Line.L_B45_B44   Phases=3 Bus1=B45.1.2.3 Bus2=B44.1.2.3   length = 0.686   r1 = 0.1932 x1 = 0.2279 r0 = 0.1932 x0 = 0.2279 c1 = 0 c0 = 0 units = km  normamps = 300.0    
+! Daily load profiles by customer type (0h-23h)
+New Loadshape.daily_R  npts=24 interval=1 mult=(0.2700 0.2520 0.2400 0.2400 0.2580 0.3300 0.4500 0.5520 0.5280 0.4680 0.4200 0.4080 0.4320 0.4560 0.4800 0.5280 0.6120 0.7320 0.8880 0.9600 0.8520 0.6900 0.5280 0.3720)
+New Loadshape.daily_C  npts=24 interval=1 mult=(0.1680 0.1500 0.1440 0.1440 0.1560 0.1920 0.2880 0.4320 0.5700 0.6480 0.6900 0.7200 0.7080 0.6960 0.6720 0.6300 0.5700 0.4680 0.3480 0.2760 0.2280 0.2040 0.1860 0.1740)
+New Loadshape.daily_I  npts=24 interval=1 mult=(0.4680 0.4560 0.4500 0.4500 0.4560 0.4920 0.5400 0.5880 0.6240 0.6480 0.6600 0.6600 0.6480 0.6420 0.6480 0.6600 0.6480 0.6120 0.5760 0.5400 0.5160 0.4920 0.4800 0.4680)
+
+New Load.Carga_B1_R  Bus1=B1  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  1512.0 kVAR=  732.28 daily=daily_R
+New Load.Carga_B2_R  Bus1=B2  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  540.0 kVAR=  261.52 daily=daily_R
+New Load.Carga_B3_C  Bus1=B3  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  252.0 kVAR=  122.04 daily=daily_C
+New Load.Carga_B4_C  Bus1=B4  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  396.0 kVAR=  191.8 daily=daily_C
+New Load.Carga_B5_R  Bus1=B5  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  936.0 kVAR=  453.32 daily=daily_R
+New Load.Carga_B6_C  Bus1=B6  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  252.0 kVAR=  122.04 daily=daily_C
+New Load.Carga_B7_R  Bus1=B7  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  360.0 kVAR=  174.36 daily=daily_R
+New Load.Carga_B8_R  Bus1=B8  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  684.0 kVAR=  331.28 daily=daily_R
+New Load.Carga_B9_R  Bus1=B9  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  432.0 kVAR=  209.24 daily=daily_R
+New Load.Carga_B10_R  Bus1=B10  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  1044.0 kVAR=  505.64 daily=daily_R
+New Load.Carga_B11_C  Bus1=B11  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  108.0 kVAR=  52.32 daily=daily_C
+New Load.Carga_B12_R  Bus1=B12  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  648.0 kVAR=  313.84 daily=daily_R
+New Load.Carga_B13_R  Bus1=B13  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  396.0 kVAR=  191.8 daily=daily_R
+New Load.Carga_B14_R  Bus1=B14  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  360.0 kVAR=  174.36 daily=daily_R
+New Load.Carga_B15_R  Bus1=B15  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  504.0 kVAR=  244.08 daily=daily_R
+New Load.Carga_B16_R  Bus1=B16  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  684.0 kVAR=  331.28 daily=daily_R
+New Load.Carga_B17_R  Bus1=B17  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  126.0 kVAR=  61.02 daily=daily_R
+New Load.Carga_B17_I  Bus1=B17  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  126.0 kVAR=  61.02 daily=daily_I
+New Load.Carga_B18_R  Bus1=B18  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  432.0 kVAR=  209.24 daily=daily_R
+New Load.Carga_B19_R  Bus1=B19  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  504.0 kVAR=  244.08 daily=daily_R
+New Load.Carga_B20_R  Bus1=B20  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  288.0 kVAR=  139.48 daily=daily_R
+New Load.Carga_B21_R  Bus1=B21  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  648.0 kVAR=  313.84 daily=daily_R
+New Load.Carga_B22_C  Bus1=B22  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  396.0 kVAR=  191.8 daily=daily_C
+New Load.Carga_B23_C  Bus1=B23  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  360.0 kVAR=  174.36 daily=daily_C
+New Load.Carga_B24_R  Bus1=B24  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  180.0 kVAR=  87.16 daily=daily_R
+New Load.Carga_B25_C  Bus1=B25  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  324.0 kVAR=  156.92 daily=daily_C
+New Load.Carga_B26_R  Bus1=B26  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  432.0 kVAR=  209.24 daily=daily_R
+New Load.Carga_B27_R  Bus1=B27  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  540.0 kVAR=  261.52 daily=daily_R
+New Load.Carga_B28_R  Bus1=B28  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  252.0 kVAR=  122.04 daily=daily_R
+New Load.Carga_B29_R  Bus1=B29  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  504.0 kVAR=  244.08 daily=daily_R
+New Load.Carga_B30_R  Bus1=B30  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  936.0 kVAR=  453.32 daily=daily_R
+New Load.Carga_B31_C  Bus1=B31  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  252.0 kVAR=  122.04 daily=daily_C
+New Load.Carga_B32_R  Bus1=B32  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  306.0 kVAR=  148.2 daily=daily_R
+New Load.Carga_B32_I  Bus1=B32  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  306.0 kVAR=  148.2 daily=daily_I
+New Load.Carga_B33_R  Bus1=B33  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  1044.0 kVAR=  505.64 daily=daily_R
+New Load.Carga_B34_R  Bus1=B34  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  432.0 kVAR=  209.24 daily=daily_R
+New Load.Carga_B35_R  Bus1=B35  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  324.0 kVAR=  156.92 daily=daily_R
+New Load.Carga_B36_R  Bus1=B36  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  108.0 kVAR=  52.32 daily=daily_R
+New Load.Carga_B37_R  Bus1=B37  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  756.0 kVAR=  366.16 daily=daily_R
+New Load.Carga_B38_R  Bus1=B38  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  396.0 kVAR=  191.8 daily=daily_R
+New Load.Carga_B39_R  Bus1=B39  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  360.0 kVAR=  174.36 daily=daily_R
+New Load.Carga_B40_R  Bus1=B40  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  504.0 kVAR=  244.08 daily=daily_R
+New Load.Carga_B41_R  Bus1=B41  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  324.0 kVAR=  156.92 daily=daily_R
+New Load.Carga_B42_R  Bus1=B42  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  432.0 kVAR=  209.24 daily=daily_R
+New Load.Carga_B43_R  Bus1=B43  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  234.0 kVAR=  113.34 daily=daily_R
+New Load.Carga_B43_I  Bus1=B43  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  234.0 kVAR=  113.34 daily=daily_I
+New Load.Carga_B44_R  Bus1=B44  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  252.0 kVAR=  122.04 daily=daily_R
+New Load.Carga_B44_I  Bus1=B44  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  252.0 kVAR=  122.04 daily=daily_I
+New Load.Carga_B45_C  Bus1=B45  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  288.0 kVAR=  139.48 daily=daily_C
+New Load.Carga_B46_R  Bus1=B46  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  648.0 kVAR=  313.84 daily=daily_R
+New Load.Carga_B47_R  Bus1=B47  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  360.0 kVAR=  174.36 daily=daily_R
+New Load.Carga_B48_C  Bus1=B48  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  288.0 kVAR=  139.48 daily=daily_C
+New Load.Carga_B49_R  Bus1=B49  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  180.0 kVAR=  87.16 daily=daily_R
+New Load.Carga_B50_C  Bus1=B50  Phases=3 Conn=Wye   Model=1 kV= 13.8  kW=  288.0 kVAR=  139.48 daily=daily_C
+
+Redirect PD.dss
+
+New Fuse.FU0 MonitoredObj = line.L_SE_51_B1  MonitoredTerm = 1  Fusecurve=TLINK ratedcurrent=200 enabled = false ! 65T fuse 
+New Fuse.FU12 MonitoredObj = line.L_SE_52_B14  MonitoredTerm = 1  Fusecurve=TLINK ratedcurrent=200 enabled = false ! 65T fuse 
+New Fuse.FU21 MonitoredObj = line.L_SE_54_B21  MonitoredTerm = 1  Fusecurve=TLINK ratedcurrent=200 enabled = false ! 65T fuse 
+New Fuse.FU22 MonitoredObj = line.L_SE_54_B22  MonitoredTerm = 1  Fusecurve=TLINK ratedcurrent=200 enabled = false ! 65T fuse 
+New Fuse.FU32 MonitoredObj = line.L_SE_54_B30  MonitoredTerm = 1  Fusecurve=TLINK ratedcurrent=200 enabled = false ! 65T fuse 
+New Fuse.FU47 MonitoredObj = line.L_SE_53_B36  MonitoredTerm = 1  Fusecurve=TLINK ratedcurrent=200 enabled = false ! 65T fuse 
+New Fuse.FU48 MonitoredObj = line.L_SE_53_B28  MonitoredTerm = 1  Fusecurve=TLINK ratedcurrent=200 enabled = false ! 65T fuse 
+
+Set VoltageBases = "13.8"
+CalcVoltageBases
+solve
