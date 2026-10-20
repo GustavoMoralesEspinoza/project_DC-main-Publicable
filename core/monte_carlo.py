@@ -238,6 +238,7 @@ def _run_single_iteration(task):
         enable_ev=cfg_ns.ENABLE_EV_CS,  path_ev=path_ev,
         enable_dc=cfg_ns.ENABLE_DC,     path_dc=path_dc,
         n_mt_total=n_mt_total,
+        control_mode=getattr(cfg_ns, "CONTROL_MODE", "off"),
     )
 
     # --- Costs ---
@@ -411,6 +412,7 @@ def run_monte_carlo(cfg):
         base = run_base_case(
             cfg.NETWORK_DSS_PATH, cfg.TRANSFORMER_MVA,
             cfg.ONLY_THREE_PHASE, excluded_buses=cfg.EXCLUDED_BUSES,
+            control_mode=getattr(cfg, "CONTROL_MODE", "off"),
         )
 
         # Build all task dicts
@@ -510,6 +512,7 @@ def run_monte_carlo(cfg):
             base = run_base_case(
                 cfg.NETWORK_DSS_PATH, cfg.TRANSFORMER_MVA,
                 cfg.ONLY_THREE_PHASE, excluded_buses=cfg.EXCLUDED_BUSES,
+                control_mode=getattr(cfg, "CONTROL_MODE", "off"),
             )
             mt_buses   = base["mt_buses"]
             mt_kv      = base["mt_kv"]
@@ -581,6 +584,7 @@ def run_monte_carlo(cfg):
                 enable_ev=cfg.ENABLE_EV_CS,  path_ev=path_ev,
                 enable_dc=cfg.ENABLE_DC,     path_dc=path_dc,
                 n_mt_total=n_mt_total,
+                control_mode=getattr(cfg, "CONTROL_MODE", "off"),
             )
 
             # --- Costs ---

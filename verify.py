@@ -81,6 +81,7 @@ base = run_base_case(
     cfg.TRANSFORMER_MVA,
     cfg.ONLY_THREE_PHASE,
     excluded_buses=cfg.EXCLUDED_BUSES,
+    control_mode=getattr(cfg, "CONTROL_MODE", "off"),
 )
 mt_buses   = base["mt_buses"]
 mt_kv      = base["mt_kv"]
@@ -188,6 +189,7 @@ sim = run_with_ders(
     enable_ev=ENABLE_EV_CS,  path_ev=path_ev,
     enable_dc=ENABLE_DC,     path_dc=path_dc,
     n_mt_total=n_mt_total,
+    control_mode=getattr(cfg, "CONTROL_MODE", "off"),
 )
 
 # =============================================================================

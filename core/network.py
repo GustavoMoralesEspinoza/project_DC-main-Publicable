@@ -8,7 +8,8 @@ import numpy as np
 import py_dss_interface
 
 
-def run_base_case(dss_file, transformer_mva, only_three_phase=True, excluded_buses=None):
+def run_base_case(dss_file, transformer_mva, only_three_phase=True, excluded_buses=None,
+                  control_mode="off"):
     """
     Compila la red y corre simulación diaria de 24 horas sin DERs.
 
@@ -17,6 +18,9 @@ def run_base_case(dss_file, transformer_mva, only_three_phase=True, excluded_bus
     dss_file        : str   — ruta absoluta al master.dss de la red
     transformer_mva : float — potencia nominal del transformador principal en MVA
     only_three_phase: bool  — si True, devuelve solo barras trifásicas como candidatas
+    control_mode    : str   — modo del lazo de control OpenDSS ("off"|"static"|"time").
+                              "off" congela reguladores/capacitores (sin iteraciones
+                              de control extra); "static" los deja actuar normalmente.
 
     Retorna
     -------
@@ -38,6 +42,7 @@ def run_base_case(dss_file, transformer_mva, only_three_phase=True, excluded_bus
     """
     dss = py_dss_interface.DSS()
     dss.text(f"compile [{dss_file}]")
+    dss.text(f"set controlmode={control_mode}")
 
     # --- Identificar barras MT candidatas ---
     mt_buses, mt_kv, mt_phases = _get_mt_buses(dss, only_three_phase, excluded_buses)
@@ -116,7 +121,7 @@ def run_with_ders(dss_file, transformer_mva,
                   enable_bess=False, path_bess=None,
                   enable_ev=False, path_ev=None,
                   enable_dc=False, path_dc=None,
-                  n_mt_total=1):
+                  n_mt_total=1, control_mode="off"):
     """
     Compila la red y carga los DERs activos con redirect explícito.
     Solo hace redirect a los archivos de los módulos habilitados.
@@ -136,6 +141,7 @@ def run_with_ders(dss_file, transformer_mva,
     """
     dss = py_dss_interface.DSS()
     dss.text(f"compile [{dss_file}]")
+    dss.text(f"set controlmode={control_mode}")
 
     # Cargar solo los DERs activos en esta simulación
     if enable_pv and path_pv:

@@ -95,6 +95,19 @@ RANDOM_SEED = 1   # Options: any integer | None (fully random)
 # single- and two-phase buses as well.
 ONLY_THREE_PHASE = True
 
+# OpenDSS control-loop mode. Governs whether in-network controls
+# (voltage regulators / SVR, switched capacitors) act during each solve.
+#   "off"    — controls frozen at their initial state; no extra control
+#              iterations. DEFAULT and fastest. Use this when you want the
+#              hosting-capacity sweep to be independent of tap/cap action.
+#   "static" — controls act normally each solve (physically faithful). A few
+#              networks with very tight regulator bands (e.g. RBRR1303, whose
+#              regulator band is ~5x smaller than one tap step) can enter
+#              control "hunting" and fail to converge on some random draws.
+#   "time"   — time-based control actions (pre-set tap/cap schedules).
+# An invalid value is passed through to OpenDSS as-is (no local validation).
+CONTROL_MODE = "off"
+
 # =============================================================================
 # 5. EXCLUDED BUSES
 #    List of bus names that will never receive any DER (PV, BESS, EV, DC).
