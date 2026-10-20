@@ -239,6 +239,7 @@ def _run_single_iteration(task):
         enable_dc=cfg_ns.ENABLE_DC,     path_dc=path_dc,
         n_mt_total=n_mt_total,
         control_mode=getattr(cfg_ns, "CONTROL_MODE", "off"),
+        allow_forms=getattr(cfg_ns, "ALLOW_FORMS", False),
     )
 
     # --- Costs ---
@@ -413,6 +414,7 @@ def run_monte_carlo(cfg):
             cfg.NETWORK_DSS_PATH, cfg.TRANSFORMER_MVA,
             cfg.ONLY_THREE_PHASE, excluded_buses=cfg.EXCLUDED_BUSES,
             control_mode=getattr(cfg, "CONTROL_MODE", "off"),
+            allow_forms=getattr(cfg, "ALLOW_FORMS", False),
         )
 
         # Build all task dicts
@@ -513,6 +515,7 @@ def run_monte_carlo(cfg):
                 cfg.NETWORK_DSS_PATH, cfg.TRANSFORMER_MVA,
                 cfg.ONLY_THREE_PHASE, excluded_buses=cfg.EXCLUDED_BUSES,
                 control_mode=getattr(cfg, "CONTROL_MODE", "off"),
+                allow_forms=getattr(cfg, "ALLOW_FORMS", False),
             )
             mt_buses   = base["mt_buses"]
             mt_kv      = base["mt_kv"]
@@ -585,6 +588,7 @@ def run_monte_carlo(cfg):
                 enable_dc=cfg.ENABLE_DC,     path_dc=path_dc,
                 n_mt_total=n_mt_total,
                 control_mode=getattr(cfg, "CONTROL_MODE", "off"),
+                allow_forms=getattr(cfg, "ALLOW_FORMS", False),
             )
 
             # --- Costs ---

@@ -108,6 +108,15 @@ ONLY_THREE_PHASE = True
 # An invalid value is passed through to OpenDSS as-is (no local validation).
 CONTROL_MODE = "off"
 
+# OpenDSS "AllowForms" switch. When forms are allowed, OpenDSS can pop up modal
+# dialog / alert boxes (e.g. on solver warnings) that BLOCK execution until a
+# human clicks them — fatal for unattended batch runs of 10,000+ iterations.
+#   False — forms disabled (AllowForms=0). Nothing can halt the run. DEFAULT.
+#   True  — forms allowed (interactive debugging only).
+# Note: OpenDSS only lets you turn this OFF within a session; leave False for
+# production sweeps.
+ALLOW_FORMS = False
+
 # =============================================================================
 # 5. EXCLUDED BUSES
 #    List of bus names that will never receive any DER (PV, BESS, EV, DC).
