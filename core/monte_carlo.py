@@ -395,6 +395,15 @@ def run_monte_carlo(cfg):
         else:  # full mode
             hourly_iter_dir = os.path.join(cfg.HOURLY_DIR, "iter")
             os.makedirs(hourly_iter_dir, exist_ok=True)
+            # Clean stale per-iteration files so the final merge only consumes
+            # files written by THIS run (otherwise an older/interrupted run's
+            # files would contaminate the consolidated perfil24h_*.csv).
+            removed = 0
+            for f in glob.glob(os.path.join(hourly_iter_dir, "hourly_*.csv")):
+                os.remove(f)
+                removed += 1
+            if removed:
+                print(f"  Cleaned {removed} stale per-iteration hourly files from iter/")
 
     # --- Initialize results CSV ---
     init_csv(cfg.RESULTS_FILE)
@@ -455,19 +464,25 @@ def run_monte_carlo(cfg):
 
         # Windows requires spawn context; use it explicitly for portability
         ctx = _mp.get_context("spawn")
+        done = 0
         with ctx.Pool(processes=n_workers,
                       initializer=_worker_init,
                       initargs=(shared,)) as pool:
-            kpi_rows = pool.map(_run_single_iteration, tasks)
-
-        # Coordinator: write results in order
-        for kpi_row in kpi_rows:
-            append_row(
-                cfg.RESULTS_FILE,
-                kpi_row["level"], kpi_row["pen_pv"], kpi_row["pen_bess"],
-                kpi_row["pen_ev"], kpi_row["pen_dc"],
-                kpi_row["sim"], kpi_row["seed_it"], kpi_row["costs"],
-            )
+            # imap_unordered streams each result as its task finishes, so the
+            # coordinator writes rows incrementally. If the run is interrupted,
+            # every iteration completed so far is already persisted to the CSV
+            # (unlike pool.map, which only returns after ALL tasks finish).
+            # Row order is irrelevant — each row carries its Seed/level.
+            for kpi_row in pool.imap_unordered(_run_single_iteration, tasks):
+                append_row(
+                    cfg.RESULTS_FILE,
+                    kpi_row["level"], kpi_row["pen_pv"], kpi_row["pen_bess"],
+                    kpi_row["pen_ev"], kpi_row["pen_dc"],
+                    kpi_row["sim"], kpi_row["seed_it"], kpi_row["costs"],
+                )
+                done += 1
+                if done % 100 == 0 or done == total:
+                    print(f"  [{done}/{total}] iterations completed", flush=True)
 
         if cfg.ENABLE_HOURLY_EXPORT:
             _merge_hourly_files(hourly_iter_dir, cfg.HOURLY_DIR)
