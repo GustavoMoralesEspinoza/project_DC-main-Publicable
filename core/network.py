@@ -9,7 +9,7 @@ import py_dss_interface
 
 
 def run_base_case(dss_file, transformer_mva, only_three_phase=True, excluded_buses=None,
-                  control_mode="off", allow_forms=False):
+                  control_mode="off", allow_forms=False, only_mt=True):
     """
     Compila la red y corre simulación diaria de 24 horas sin DERs.
 
@@ -73,7 +73,8 @@ def run_base_case(dss_file, transformer_mva, only_three_phase=True, excluded_bus
         dss.text("Solve")
 
         # Tensiones — acumula barras afectadas en los sets
-        vmin, vmax, buses_bajo, buses_alto, _, _ = _get_voltage_stats(dss)
+        vmin, vmax, buses_bajo, buses_alto, _, _ = _get_voltage_stats(
+            dss, only_mt=only_mt, only_three_phase=only_three_phase)
         perfil_vmin.append(vmin)
         perfil_vmax.append(vmax)
         buses_vmin.update(buses_bajo)
@@ -123,7 +124,8 @@ def run_with_ders(dss_file, transformer_mva,
                   enable_bess=False, path_bess=None,
                   enable_ev=False, path_ev=None,
                   enable_dc=False, path_dc=None,
-                  n_mt_total=1, control_mode="off", allow_forms=False):
+                  n_mt_total=1, control_mode="off", allow_forms=False,
+                  only_mt=True, only_three_phase=True):
     """
     Compila la red y carga los DERs activos con redirect explícito.
     Solo hace redirect a los archivos de los módulos habilitados.
@@ -175,7 +177,8 @@ def run_with_ders(dss_file, transformer_mva,
         dss.text(f"Set number={hour + 1}")
         dss.text("Solve")
 
-        vmin, vmax, buses_bajo, buses_alto, n_bajo_hora, n_alto_hora = _get_voltage_stats(dss)
+        vmin, vmax, buses_bajo, buses_alto, n_bajo_hora, n_alto_hora = _get_voltage_stats(
+            dss, only_mt=only_mt, only_three_phase=only_three_phase)
         perfil_vmin.append(vmin)
         perfil_vmax.append(vmax)
         buses_vmin.update(buses_bajo)
@@ -195,7 +198,7 @@ def run_with_ders(dss_file, transformer_mva,
         s_kva = (p_act**2 + p_reac**2) ** 0.5
         perfil_trafo.append(100.0 * s_kva / kva_base)
 
-        # Tensión promedio por barra en esta hora
+        # Tensión promedio por barra en esta hora (mismo filtro MT que los KPIs)
         for bus in dss.circuit.buses_names:
             bus_clean = _clean_bus_name(bus)
             if not bus_clean:
@@ -203,6 +206,8 @@ def run_with_ders(dss_file, transformer_mva,
             dss.circuit.set_active_bus(bus_clean)
             base_v = dss.bus.kv_base * 1000.0
             if base_v <= 0:
+                continue
+            if only_mt and not _is_mt_bus(dss, only_three_phase):
                 continue
             voltages_v = dss.bus.vmag_angle[::2]
             v_pu = [v / base_v for v in voltages_v if v / base_v > 0.05]
@@ -285,13 +290,31 @@ def _get_mt_buses(dss, only_three_phase, excluded_buses=None):
     return buses, kvs, phases
 
 
-def _get_voltage_stats(dss):
+def _is_mt_bus(dss, only_three_phase):
     """
-    Recorre todas las barras en un instante horario y devuelve:
+    True si la barra ACTIVA cumple el criterio de media tensión (2.3-25 kV).
+    Mismo criterio que _get_mt_buses para que el conteo de violaciones y el
+    denominador de severidad (n_mt_total) usen el mismo universo de barras.
+    Asume que la barra ya fue activada con set_active_bus.
+    """
+    kv_base = dss.bus.kv_base
+    if not (2.3 <= kv_base <= 25):
+        return False
+    if only_three_phase and dss.bus.num_nodes != 3:
+        return False
+    return True
+
+
+def _get_voltage_stats(dss, only_mt=True, only_three_phase=True):
+    """
+    Recorre las barras en un instante horario y devuelve:
         vmin        : tensión mínima del sistema en pu
         vmax        : tensión máxima del sistema en pu
         buses_bajo  : set de nombres de barras con al menos una fase < 0.95 pu
         buses_alto  : set de nombres de barras con al menos una fase > 1.05 pu
+
+    Si only_mt=True, solo se consideran barras de media tensión (2.3-25 kV),
+    evitando que barras BT con base de tensión inconsistente contaminen los KPIs.
 
     El loop de 24h acumula estos sets con .update() para obtener
     el total de barras únicas afectadas en toda la simulación.
@@ -307,6 +330,8 @@ def _get_voltage_stats(dss):
         dss.circuit.set_active_bus(bus_clean)
         base_v = dss.bus.kv_base * 1000.0
         if base_v <= 0:
+            continue
+        if only_mt and not _is_mt_bus(dss, only_three_phase):
             continue
         voltages_v = dss.bus.vmag_angle[::2]
         v_pu = [v / base_v for v in voltages_v if v / base_v > 0.05]

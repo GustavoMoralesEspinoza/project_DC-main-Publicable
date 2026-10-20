@@ -19,6 +19,7 @@ data (irradiance matrices, profiles) on every task.
 import os
 import glob
 import random
+import time
 import types
 import numpy as np
 
@@ -100,6 +101,16 @@ def _cfg_to_namespace(cfg):
         if isinstance(v, (str, int, float, bool, list, tuple, type(None))):
             ns[k] = v
     return types.SimpleNamespace(**ns)
+
+
+def _print_elapsed(t_start, total):
+    """Prints wall-clock duration of the run (HH:MM:SS) and per-iteration average."""
+    elapsed = time.time() - t_start
+    h, rem = divmod(int(elapsed), 3600)
+    m, s   = divmod(rem, 60)
+    per_it = (elapsed / total) if total else 0.0
+    print(f"  Elapsed: {h:02d}:{m:02d}:{s:02d}  ({elapsed:.1f} s"
+          f"  |  {per_it:.3f} s/iter over {total} iterations)")
 
 
 # =============================================================================
@@ -240,6 +251,8 @@ def _run_single_iteration(task):
         n_mt_total=n_mt_total,
         control_mode=getattr(cfg_ns, "CONTROL_MODE", "off"),
         allow_forms=getattr(cfg_ns, "ALLOW_FORMS", False),
+        only_mt=getattr(cfg_ns, "ENABLE_ONLY_MT", True),
+        only_three_phase=getattr(cfg_ns, "ONLY_THREE_PHASE", True),
     )
 
     # --- Costs ---
@@ -313,6 +326,8 @@ def run_monte_carlo(cfg):
     ----------
     cfg : module or SimpleNamespace — configuration (import config as cfg)
     """
+    _t_start = time.time()
+
     # Guard: parallel requires full mode
     if getattr(cfg, "ENABLE_PARALLEL", False) and cfg.SCENARIO_MODE != "full":
         raise ValueError(
@@ -424,6 +439,7 @@ def run_monte_carlo(cfg):
             cfg.ONLY_THREE_PHASE, excluded_buses=cfg.EXCLUDED_BUSES,
             control_mode=getattr(cfg, "CONTROL_MODE", "off"),
             allow_forms=getattr(cfg, "ALLOW_FORMS", False),
+            only_mt=getattr(cfg, "ENABLE_ONLY_MT", True),
         )
 
         # Build all task dicts
@@ -488,6 +504,7 @@ def run_monte_carlo(cfg):
             _merge_hourly_files(hourly_iter_dir, cfg.HOURLY_DIR)
 
         print(f"\nSimulation complete. Results: {cfg.RESULTS_FILE}")
+        _print_elapsed(_t_start, total)
         return
 
     # =========================================================================
@@ -531,6 +548,7 @@ def run_monte_carlo(cfg):
                 cfg.ONLY_THREE_PHASE, excluded_buses=cfg.EXCLUDED_BUSES,
                 control_mode=getattr(cfg, "CONTROL_MODE", "off"),
                 allow_forms=getattr(cfg, "ALLOW_FORMS", False),
+                only_mt=getattr(cfg, "ENABLE_ONLY_MT", True),
             )
             mt_buses   = base["mt_buses"]
             mt_kv      = base["mt_kv"]
@@ -604,6 +622,8 @@ def run_monte_carlo(cfg):
                 n_mt_total=n_mt_total,
                 control_mode=getattr(cfg, "CONTROL_MODE", "off"),
                 allow_forms=getattr(cfg, "ALLOW_FORMS", False),
+                only_mt=getattr(cfg, "ENABLE_ONLY_MT", True),
+                only_three_phase=getattr(cfg, "ONLY_THREE_PHASE", True),
             )
 
             # --- Costs ---
@@ -673,3 +693,4 @@ def run_monte_carlo(cfg):
         _merge_hourly_files(hourly_iter_dir, cfg.HOURLY_DIR)
 
     print(f"\nSimulation complete. Results: {cfg.RESULTS_FILE}")
+    _print_elapsed(_t_start, total)

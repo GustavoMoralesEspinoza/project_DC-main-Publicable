@@ -1,0 +1,11 @@
+KPI,Pen_Level,N_max,N_min,SE_at_Nmax,CV_at_Nmax,Converged
+B_VminVmax,50,5000,50,7.15665,0.28344,Yes
+B_VminVmax,100,5000,10,2.76502,0.07151,Yes
+Sev_VminVmax_pct,50,5000,500,0.08692,0.28011,Yes
+Sev_VminVmax_pct,100,5000,50,0.05693,0.11076,Yes
+Vmax_24h,50,5000,10,0.00069,0.02824,Yes
+Vmax_24h,100,5000,10,0.00102,0.03833,Yes
+Trafo_Loading_pct,50,5000,10,0.02903,0.02639,Yes
+Trafo_Loading_pct,100,5000,50,0.35796,0.1628,Yes
+Energy_Losses,50,5000,30,30.62474,0.41743,Yes
+Energy_Losses,100,5000,100,112.36513,0.57957,Yes

@@ -95,6 +95,15 @@ RANDOM_SEED = 1   # Options: any integer | None (fully random)
 # single- and two-phase buses as well.
 ONLY_THREE_PHASE = True
 
+# Restrict the voltage-violation analysis to medium-voltage (MV) buses only.
+#   True  — Vmin/Vmax, affected-bus counts and severity are computed ONLY over
+#           MV buses (2.3-25 kV), the same universe used for DER placement.
+#           Recommended: low-voltage (LV) secondary buses often carry an
+#           inconsistent per-unit base that injects spurious over/under-voltage
+#           into the KPIs. DEFAULT.
+#   False — analyse every bus in the circuit (legacy behaviour).
+ENABLE_ONLY_MT = True
+
 # OpenDSS control-loop mode. Governs whether in-network controls
 # (voltage regulators / SVR, switched capacitors) act during each solve.
 #   "off"    — controls frozen at their initial state; no extra control

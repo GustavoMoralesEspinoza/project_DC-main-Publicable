@@ -83,6 +83,7 @@ base = run_base_case(
     excluded_buses=cfg.EXCLUDED_BUSES,
     control_mode=getattr(cfg, "CONTROL_MODE", "off"),
     allow_forms=getattr(cfg, "ALLOW_FORMS", False),
+    only_mt=getattr(cfg, "ENABLE_ONLY_MT", True),
 )
 mt_buses   = base["mt_buses"]
 mt_kv      = base["mt_kv"]
@@ -192,6 +193,8 @@ sim = run_with_ders(
     n_mt_total=n_mt_total,
     control_mode=getattr(cfg, "CONTROL_MODE", "off"),
     allow_forms=getattr(cfg, "ALLOW_FORMS", False),
+    only_mt=getattr(cfg, "ENABLE_ONLY_MT", True),
+    only_three_phase=getattr(cfg, "ONLY_THREE_PHASE", True),
 )
 
 # =============================================================================
