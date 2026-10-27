@@ -56,3 +56,8 @@ results/hourly_validate_*/
 data/networks/**/*.png
 data/networks/**/*.pdf
 data/networks/**/output/
+
+# Per-iteration hourly files (full mode) — merged at end of run
+results/batch_stability/
+DC_03_CONTEXTO_IMPLEMENTACION.md
+DC_04_PLAN_IMPLEMENTACION.md

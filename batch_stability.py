@@ -41,14 +41,14 @@ from matplotlib.patches import Rectangle
 # =============================================================================
 
 # Ruta al archivo CSV con resultados Monte Carlo a analizar
-CSV_FILE = "results/results_RBRR1303_PV50_BESS0_EV0_DC0_PRE_MT_FIX.csv"
+CSV_FILE = "results/results_RBRR1303_PV100_BESS0_EV0_DC0.csv"
 
 # Umbral de tolerancia de estabilidad (X%)
 # Un tamaño de lote m se considera ESTABLE si el CV inter-lotes es <= THRESHOLD_X %
 THRESHOLD_X = 5.0
 
 # Tamaños de lote (m) a evaluar para hallar la frontera de estabilidad
-BATCH_SIZES = [50, 100, 250, 500, 1000]
+BATCH_SIZES = [50, 100, 250, 500, 1000, 2500]
 
 # Nivel de penetración a evaluar
 # None = auto-detecta la penetración del archivo (si hay un solo nivel)
@@ -61,8 +61,8 @@ MODE = "both"
 # Número de grupos fijos para la perspectiva "fixed_k"
 K_FIXED = 10
 
-# KPI para mostrar en la Tabla 1 detallada por lote en consola ("all" o nombre de KPI)
-DETAILED_KPI = "B_VminVmax"
+# KPI para mostrar en la Tabla 1 detallada por lote en consola ("all" o nombre de KPI específico)
+DETAILED_KPI = "all"
 
 # Tamaño de lote m para mostrar en la Tabla 1 detallada (None = usa el m mediano disponible)
 DETAILED_BATCH_SIZE = 250
@@ -96,10 +96,19 @@ class BatchStabilityAnalyzer:
                  kpis=None, output_dir: str = OUTPUT_DIR):
         self.csv_path = Path(csv_path)
         if not self.csv_path.is_file():
-            raise FileNotFoundError(f"Archivo CSV no encontrado: {self.csv_path}")
+            script_dir = Path(__file__).parent.resolve()
+            alt_path = script_dir / csv_path
+            if alt_path.is_file():
+                self.csv_path = alt_path
+            else:
+                raise FileNotFoundError(f"Archivo CSV no encontrado: {self.csv_path}")
 
         self.threshold = float(threshold_pct)
-        self.output_dir = Path(output_dir)
+        out_path = Path(output_dir)
+        if not out_path.is_absolute():
+            script_dir = Path(__file__).parent.resolve()
+            out_path = script_dir / output_dir
+        self.output_dir = out_path
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
         self.df_raw = pd.read_csv(self.csv_path)
@@ -339,6 +348,145 @@ class BatchStabilityAnalyzer:
 
         return df_frontier
 
+    def analyze_multi_kpi_breakdown(self, batch_sizes=None, mode: str = "exhaustive", k_fixed: int = 10) -> pd.DataFrame:
+        """
+        Genera el desglose completo de variabilidad inter-lotes (CV_inter) para cada una de las métricas:
+        Media, Mediana, Std_Trad, RMSD_Mediana, MAD, IQR y P95 para todos los KPIs evaluados.
+        """
+        if batch_sizes is None:
+            batch_sizes = BATCH_SIZES
+
+        active_kpis = [k for k in self.kpis_info if k[0] in self.df.columns]
+        rows = []
+
+        for col, desc, unit in active_kpis:
+            vals = self.df[col].dropna().values
+
+            for m in batch_sizes:
+                grupos = self.partition_data(vals, batch_size=m, mode=mode, k_fixed=k_fixed)
+                if not grupos:
+                    continue
+
+                k_actual = len(grupos)
+                means = [float(np.mean(g)) for g in grupos]
+                meds  = [float(np.median(g)) for g in grupos]
+                stds  = [float(np.std(g, ddof=1)) if len(g) > 1 else 0.0 for g in grupos]
+                mads  = [float(np.median(np.abs(g - np.median(g)))) for g in grupos]
+                rmsds = [float(np.sqrt(np.mean((g - np.median(g))**2))) for g in grupos]
+                iqrs  = [float(np.percentile(g, 75) - np.percentile(g, 25)) for g in grupos]
+                p95s  = [float(np.percentile(g, 95)) for g in grupos]
+
+                def calc_cv(arr):
+                    m_val = float(np.mean(arr))
+                    s_val = float(np.std(arr, ddof=1)) if len(arr) > 1 else 0.0
+                    if abs(m_val) >= 1.0:
+                        return (s_val / abs(m_val)) * 100.0
+                    else:
+                        return (s_val / 1.0) * 100.0
+
+                cv_m    = calc_cv(means)
+                cv_med  = calc_cv(meds)
+                cv_s    = calc_cv(stds)
+                cv_rmsd = calc_cv(rmsds)
+                cv_mad  = calc_cv(mads)
+                cv_iqr  = calc_cv(iqrs)
+                cv_p95  = calc_cv(p95s)
+
+                tc_ok   = (cv_m <= self.threshold) and (cv_med <= self.threshold)
+                disp_ok = (cv_s <= self.threshold) and (cv_rmsd <= self.threshold) and (cv_mad <= self.threshold)
+
+                rows.append({
+                    "KPI": col,
+                    "Descripcion": desc,
+                    "Unidad": unit,
+                    "m": m,
+                    "k_lotes": k_actual,
+                    "N_sims_eval": m * k_actual,
+                    "CV_Media_%": round(cv_m, 2),
+                    "CV_Mediana_%": round(cv_med, 2),
+                    "CV_StdTrad_%": round(cv_s, 2),
+                    "CV_RMSD_Med_%": round(cv_rmsd, 2),
+                    "CV_MAD_%": round(cv_mad, 2),
+                    "CV_IQR_%": round(cv_iqr, 2),
+                    "CV_P95_%": round(cv_p95, 2),
+                    "Estado_TendCentral": "ESTABLE" if tc_ok else "INESTABLE",
+                    "Estado_Dispersion": "ESTABLE" if disp_ok else "INESTABLE"
+                })
+
+        return pd.DataFrame(rows)
+
+    def format_multi_kpi_report(self, df_breakdown: pd.DataFrame, mode_name: str) -> str:
+        """
+        Formatea el reporte multi-métrica detallado como texto estructurado ("relatorio").
+        """
+        lines = []
+        lines.append("=" * 115)
+        lines.append("  RELATORIO DE ESTABILIDAD MULTI-METRICA DE MONTE CARLO POR LOTES (BATCH STABILITY)")
+        lines.append("=" * 115)
+        lines.append(f"  Archivo Analizado: {self.csv_path.name}")
+        lines.append(f"  Simulaciones N:    {self.n_total:,}")
+        if self.pen_selected is not None:
+            lines.append(f"  Penetracion:       {self.pen_selected}%")
+        lines.append(f"  Modo de Particion: {mode_name}")
+        lines.append(f"  Criterio de Exito: CV_inter <= {self.threshold}%")
+        lines.append("=" * 115 + "\n")
+
+        unique_kpis = df_breakdown["KPI"].unique()
+
+        for kpi in unique_kpis:
+            sub = df_breakdown[df_breakdown["KPI"] == kpi].copy()
+            kpi_desc = sub["Descripcion"].iloc[0]
+            kpi_unit = sub["Unidad"].iloc[0]
+            vals = self.df[kpi].dropna().values
+
+            mean_g = float(np.mean(vals))
+            med_g  = float(np.median(vals))
+            std_g  = float(np.std(vals, ddof=1)) if len(vals) > 1 else 0.0
+            mad_g  = float(np.median(np.abs(vals - med_g)))
+            rmsd_g = float(np.sqrt(np.mean((vals - med_g)**2)))
+            p95_g  = float(np.percentile(vals, 95))
+
+            lines.append("=" * 115)
+            lines.append(f"  KPI: {kpi.upper()} [{kpi_desc}] (Unidad: {kpi_unit})")
+            lines.append(f"  Poblacion Global N={len(vals):,} | Media: {mean_g:,.2f} | Mediana: {med_g:,.2f} | Std_Trad: {std_g:,.2f} | MAD: {mad_g:,.2f} | RMSD: {rmsd_g:,.2f} | P95: {p95_g:,.2f}")
+            lines.append("-" * 115)
+            lines.append(f"{'m':<6} | {'k':<5} | {'N_eval':<7} | {'CV_Media':<10} | {'CV_Mediana':<12} | {'CV_StdTrad':<12} | {'CV_RMSD_Med':<12} | {'CV_MAD':<10} | {'Tend.Central':<13} | {'Dispersion'}")
+            lines.append("-" * 115)
+
+            opt_tc = None
+            opt_disp = None
+
+            for _, r in sub.iterrows():
+                m_val = int(r["m"])
+                k_val = int(r["k_lotes"])
+                n_eval = int(r["N_sims_eval"])
+                cv_m = r["CV_Media_%"]
+                cv_med = r["CV_Mediana_%"]
+                cv_s = r["CV_StdTrad_%"]
+                cv_rmsd = r["CV_RMSD_Med_%"]
+                cv_mad = r["CV_MAD_%"]
+                st_tc = r["Estado_TendCentral"]
+                st_disp = r["Estado_Dispersion"]
+
+                if st_tc == "ESTABLE" and opt_tc is None:
+                    opt_tc = m_val
+                if st_disp == "ESTABLE" and opt_disp is None:
+                    opt_disp = m_val
+
+                lines.append(f"{m_val:<6} | {k_val:<5} | {n_eval:<7} | {cv_m:>8.2f}% | {cv_med:>10.2f}% | {cv_s:>10.2f}% | {cv_rmsd:>10.2f}% | {cv_mad:>8.2f}% | {st_tc:<13} | {st_disp}")
+
+            max_m_val = sub["m"].max()
+            str_opt_tc = str(opt_tc) if opt_tc is not None else f"> {max_m_val}"
+            str_opt_disp = str(opt_disp) if opt_disp is not None else f"> {max_m_val}"
+
+            lines.append("-" * 115)
+            lines.append(f"  >>> RESUMEN KPI {kpi}:")
+            lines.append(f"      - N_optimo Tendencia Central (Media y Mediana <= {self.threshold}%): {str_opt_tc}")
+            lines.append(f"      - N_optimo Dispersion        (Std, RMSD y MAD <= {self.threshold}%):   {str_opt_disp}")
+            lines.append("\n")
+
+        return "\n".join(lines)
+
     def run_complete_analysis(self, batch_sizes=None, mode: str = "both", k_fixed: int = 10,
                               detailed_kpi: str = DETAILED_KPI, detailed_m: int = DETAILED_BATCH_SIZE,
                               save_plots: bool = SAVE_PLOTS):
@@ -380,16 +528,32 @@ class BatchStabilityAnalyzer:
             # Guardar Tabla 2
             out_frontier = self.output_dir / f"tabla2_frontera_{scenario_label}_{m_mode}_X{int(self.threshold)}.csv"
             df_frontier.to_csv(out_frontier, index=False, encoding="utf-8")
-            print(f"  [GUARDADO] {out_frontier}")
+            print(f"  [GUARDADO] {out_frontier}\n")
 
-            # Generar Gráficos de Visión Global (Fig 1 y Fig 3)
+            # 2. Relatorio de Estabilidad Multi-Métrica por KPI (Desglose de Media, Mediana, Std, RMSD, MAD)
+            df_breakdown = self.analyze_multi_kpi_breakdown(batch_sizes=batch_sizes, mode=m_mode, k_fixed=k_fixed)
+            report_text = self.format_multi_kpi_report(df_breakdown, mode_name)
+            print(report_text)
+
+            # Guardar Relatorio (CSV y TXT)
+            out_breakdown_csv = self.output_dir / f"relatorio_desglose_metricas_{scenario_label}_{m_mode}.csv"
+            df_breakdown.to_csv(out_breakdown_csv, index=False, encoding="utf-8")
+            print(f"  [GUARDADO] {out_breakdown_csv}")
+
+            out_report_txt = self.output_dir / f"relatorio_estabilidad_{scenario_label}_{m_mode}.txt"
+            with open(out_report_txt, "w", encoding="utf-8") as f:
+                f.write(report_text)
+            print(f"  [GUARDADO] {out_report_txt}\n")
+
+            # Generar Gráficos de Visión Global (Fig 1, Fig 1 3-Métricas y Fig 3)
             if save_plots:
                 figures_dir = self.output_dir / "figures"
                 figures_dir.mkdir(parents=True, exist_ok=True)
                 self.plot_fig1_frontera(df_frontier, batch_sizes, self.threshold, figures_dir, scenario_label, m_mode)
+                self.plot_fig1_frontera_3metricas(df_breakdown, batch_sizes, self.threshold, figures_dir, scenario_label, m_mode)
                 self.plot_fig3_heatmap(df_frontier, batch_sizes, self.threshold, figures_dir, scenario_label, m_mode)
 
-            # 2. Tabla 1 (Detalle por lote para el KPI y m seleccionado)
+            # 3. Tabla 1 (Detalle por lote para el KPI y m seleccionado)
             kpis_to_detail = [k[0] for k in self.kpis_info] if detailed_kpi == "all" else [detailed_kpi]
             
             for k_target in kpis_to_detail:
@@ -514,6 +678,110 @@ class BatchStabilityAnalyzer:
         fig.savefig(f"{out_base}.pdf", bbox_inches="tight")
         plt.close(fig)
         print(f"  [GRAFICO 1] {out_base}.png/.pdf")
+
+    def plot_fig1_frontera_3metricas(self, df_breakdown, batch_sizes, threshold, out_dir, scenario_name, mode_name):
+        """
+        GRAFICO 1-B: Curvas de Frontera de Estabilidad Desglosadas por Métrica:
+        Genera un panel tríptico comparando (a) Media, (b) Mediana y (c) Desviación Estándar.
+        También genera figuras individuales para cada métrica por separado.
+        """
+        x_indices = np.arange(len(batch_sizes))
+        x_labels = [f"m={m}" for m in batch_sizes]
+
+        tech_colors = {
+            "B_VminVmax":           "#1F77B4",
+            "Sev_VminVmax_pct":     "#2CA02C",
+            "Energy_Losses":        "#FF7F0E",
+            "Min_Fluxo_Subestacao": "#9467BD",
+            "Trafo_Loading_pct":    "#D62728",
+        }
+        kpi_desc = {k[0]: k[1] for k in self.kpis_info}
+        active_kpis = [k[0] for k in self.kpis_info if k[0] in self.df.columns]
+
+        # 1. Tríptico Comparativo (1 fila x 3 columnas)
+        fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(13.0, 3.8), dpi=300)
+        panels = [
+            (ax1, "CV_Media_%",   "(a) Estabilidad de la Media (CV_Media %)",               12.0),
+            (ax2, "CV_Mediana_%", "(b) Estabilidad de la Mediana (CV_Mediana %)",           12.0),
+            (ax3, "CV_StdTrad_%", "(c) Estabilidad de la Desviacion Estandar (CV_StdTrad %)", 45.0)
+        ]
+
+        for ax, metric_col, title, max_y in panels:
+            ax.axhspan(0, threshold, color="#D4EDDA", alpha=0.55, zorder=1)
+            ax.axhline(threshold, color="#DC3545", linestyle="--", linewidth=1.0, zorder=2)
+            ax.text(x_indices[-1], threshold + max_y * 0.02, f"Umbral X = {threshold}%", color="#DC3545",
+                    fontsize=7, ha="right", va="bottom", fontweight="bold")
+
+            for kpi in active_kpis:
+                sub = df_breakdown[df_breakdown["KPI"] == kpi]
+                y_vals = []
+                for m in batch_sizes:
+                    row_m = sub[sub["m"] == m]
+                    v = row_m[metric_col].values[0] if not row_m.empty else np.nan
+                    y_vals.append(v)
+
+                color = tech_colors.get(kpi, "#555555")
+                label = f"{kpi_desc.get(kpi, kpi)} ({kpi})"
+                ax.plot(x_indices, y_vals, marker="o", markersize=4, linewidth=1.3,
+                        color=color, label=label, zorder=4)
+
+            ax.set_xticks(x_indices)
+            ax.set_xticklabels(x_labels, fontsize=7.5)
+            ax.set_xlabel("Tamano de Lote m (Simulaciones)", fontsize=8)
+            ax.set_ylabel("CV_inter (%)", fontsize=8)
+            ax.set_ylim(0, max_y)
+            ax.set_title(title, fontsize=8.5, fontweight="bold", pad=8)
+            ax.grid(True, linestyle=":", alpha=0.5, color="#CCCCCC")
+
+        handles, labels = ax1.get_legend_handles_labels()
+        handles.append(Rectangle((0, 0), 1, 1, facecolor="#D4EDDA", edgecolor="#28A745", label=f"Zona Estable (<= {threshold}%)"))
+        labels.append(f"Zona Estable (<= {threshold}%)")
+        fig.legend(handles, labels, loc="upper center", bbox_to_anchor=(0.5, 1.05), ncol=3, fontsize=7.5, frameon=True)
+
+        fig.tight_layout()
+        out_base = Path(out_dir) / f"fig1_frontera_estabilidad_3metricas_{scenario_name}_{mode_name}"
+        fig.savefig(f"{out_base}.png", dpi=300, bbox_inches="tight")
+        fig.savefig(f"{out_base}.pdf", bbox_inches="tight")
+        plt.close(fig)
+        print(f"  [GRAFICO 1-B TRIPTICO 3 METRICAS] {out_base}.png/.pdf")
+
+        # 2. Figuras Individuales para Media, Mediana y Desviación Estándar
+        metric_configs = [
+            ("CV_Media_%",   "media",   "Estabilidad de la Media (CV_Media %)",               12.0),
+            ("CV_Mediana_%", "mediana", "Estabilidad de la Mediana (CV_Mediana %)",           12.0),
+            ("CV_StdTrad_%", "stdtrad", "Estabilidad de la Desviacion Estandar (CV_Std %)",   45.0)
+        ]
+
+        for m_col, suffix, title, max_y in metric_configs:
+            fig_ind, ax_ind = plt.subplots(figsize=(5.5, 3.6), dpi=300)
+            ax_ind.axhspan(0, threshold, color="#D4EDDA", alpha=0.55, zorder=1, label=f"Zona de Estabilidad (<= {threshold}%)")
+            ax_ind.axhline(threshold, color="#DC3545", linestyle="--", linewidth=1.0, zorder=2)
+            ax_ind.text(x_indices[-1], threshold + max_y * 0.02, f"Umbral X = {threshold}%", color="#DC3545",
+                        fontsize=7, ha="right", va="bottom", fontweight="bold")
+
+            for kpi in active_kpis:
+                sub = df_breakdown[df_breakdown["KPI"] == kpi]
+                y_vals = [sub[sub["m"] == m][m_col].values[0] if not sub[sub["m"] == m].empty else np.nan for m in batch_sizes]
+                color = tech_colors.get(kpi, "#555555")
+                label = f"{kpi_desc.get(kpi, kpi)} ({kpi})"
+                ax_ind.plot(x_indices, y_vals, marker="o", markersize=4, linewidth=1.3,
+                            color=color, label=label, zorder=4)
+
+            ax_ind.set_xticks(x_indices)
+            ax_ind.set_xticklabels(x_labels, fontsize=8)
+            ax_ind.set_xlabel("Tamano de Lote m (Numero de Simulaciones)", fontsize=8)
+            ax_ind.set_ylabel("Coeficiente de Variacion Inter-Grupos CV_inter (%)", fontsize=8)
+            ax_ind.set_ylim(0, max_y)
+            ax_ind.set_title(f"{title}\nEscenario: {scenario_name} | Modo: {mode_name}", pad=6, fontsize=9)
+            ax_ind.legend(loc="upper right", frameon=True, framealpha=0.9, facecolor="white", edgecolor="#CCCCCC", fontsize=7)
+            ax_ind.grid(True, linestyle=":", alpha=0.5, color="#CCCCCC")
+
+            fig_ind.tight_layout()
+            out_ind = Path(out_dir) / f"fig1_frontera_{suffix}_{scenario_name}_{mode_name}"
+            fig_ind.savefig(f"{out_ind}.png", dpi=300, bbox_inches="tight")
+            fig_ind.savefig(f"{out_ind}.pdf", bbox_inches="tight")
+            plt.close(fig_ind)
+            print(f"  [GRAFICO 1 INDIVIDUAL - {suffix.upper()}] {out_ind}.png/.pdf")
 
     def plot_fig2_comparativa(self, vals_array, m_small, m_large, threshold, out_dir, scenario_name, kpi_name):
         """
