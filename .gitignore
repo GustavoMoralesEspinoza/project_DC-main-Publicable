@@ -25,6 +25,8 @@ results/figures/
 results/hourly/
 results/BASE_PAPER_UNI/
 results/resultados_*/
+results/regression/
+results/test_18bus/
 
 # Figuras generadas por scripts de plots/
 plots/Articulo/
@@ -44,6 +46,7 @@ data/networks/**/cenario_*.dss
 # Modo "full": carpeta de escenarios con un archivo por iteración
 # Solo se rastrean las redes base (.dss de la red) — nunca los escenarios generados
 data/networks/**/cenarios/
+data/networks/ITQ_D/
 
 # Per-iteration hourly files (full mode) — merged at end of run
 results/hourly/iter/
@@ -61,3 +64,7 @@ data/networks/**/output/
 results/batch_stability/
 DC_03_CONTEXTO_IMPLEMENTACION.md
 DC_04_PLAN_IMPLEMENTACION.md
+DC_04a_PLAN_DC.md
+DC_04a_REPORTE_CORRECCIONES.md
+
+tests/

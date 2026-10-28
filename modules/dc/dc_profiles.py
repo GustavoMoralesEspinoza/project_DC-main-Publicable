@@ -10,6 +10,7 @@ Convenciones:
 
 import os
 import numpy as np
+import pandas as pd
 
 _FALLBACK_WORKLOAD = [0.90] * 24
 _FALLBACK_WORKLOAD_NAME = "Fallback_Flat"
@@ -100,3 +101,68 @@ def load_dc_gen_profile(profiles_dir):
 
     print("  [INFO] dc_profiles: No se encontró gen_*.csv — usando fallback plano para generador BTM.")
     return list(_FALLBACK_GEN), _FALLBACK_GEN_NAME
+
+
+# =============================================================================
+# Modelo GT&D 2027: arquetipos y temperaturas (independiente del modulo PV)
+# =============================================================================
+
+def list_dc_archetypes(archetypes_dir):
+    """Nombres de los arquetipos disponibles (archivos .csv de archetypes_dir, sin extension)."""
+    if not os.path.isdir(archetypes_dir):
+        return []
+    return sorted(os.path.splitext(f)[0] for f in os.listdir(archetypes_dir) if f.endswith(".csv"))
+
+
+def get_workload_profile(archetype, archetypes_dir):
+    """
+    Lee la curva de utilizacion horaria (u_k(h) en el paper) del arquetipo
+    desde <archetypes_dir>/<archetype>.csv.
+
+    El CSV debe tener columnas Hora (0-23, las 24, sin repetir) y Utilizacion
+    (entre 0 y 1). Los valores se usan tal cual, sin normalizar. Sin fallback:
+    cualquier problema detiene la corrida.
+
+    Retorna : list de 24 floats entre 0 y 1, ordenados por hora
+    """
+    path = os.path.join(archetypes_dir, f"{archetype}.csv")
+    if not os.path.isfile(path):
+        raise FileNotFoundError(f"Arquetipo DC {archetype!r} no encontrado: {path}. "
+                                f"Disponibles: {list_dc_archetypes(archetypes_dir)}")
+    df = pd.read_csv(path)
+    for col in ("Hora", "Utilizacion"):
+        if col not in df.columns:
+            raise ValueError(f"{path}: falta la columna {col!r}")
+    if sorted(df["Hora"].tolist()) != list(range(24)):
+        raise ValueError(f"{path}: la columna Hora debe tener 0 a 23, una vez cada una")
+    u = df.sort_values("Hora")["Utilizacion"].to_numpy(dtype=float)
+    if not np.isfinite(u).all() or u.min() < 0 or u.max() > 1:
+        raise ValueError(f"{path}: Utilizacion debe estar entre 0 y 1")
+    return u.tolist()
+
+
+def load_dc_temperature_matrix(csv_file, temp_col="T2m_mean"):
+    """
+    Lee las temperaturas ambiente horarias medias por mes para el modelo DC.
+
+    Carga independiente del modulo PV (no usa load_irradiance_matrices).
+    El CSV debe tener columnas Mes (1-12), Hora (0-23) y temp_col (grados Celsius).
+    Si hay varias filas por (Mes, Hora), por ejemplo una por dia, se promedian.
+
+    Retorna
+    -------
+    temp_matrix : np.ndarray shape (12, 24), grados Celsius
+    """
+    if not os.path.isfile(csv_file):
+        raise FileNotFoundError(f"DC_TEMPERATURE_FILE no encontrado: {csv_file}")
+    df = pd.read_csv(csv_file)
+    for col in ("Mes", "Hora", temp_col):
+        if col not in df.columns:
+            raise ValueError(f"{csv_file}: falta la columna {col!r}")
+
+    table = (df.groupby(["Mes", "Hora"])[temp_col].mean()
+               .unstack("Hora")
+               .reindex(index=range(1, 13), columns=range(24)))
+    if table.isna().any().any():
+        raise ValueError(f"{csv_file}: faltan pares (Mes, Hora) para completar 12x24")
+    return table.to_numpy(dtype=float)

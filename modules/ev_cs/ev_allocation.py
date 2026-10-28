@@ -157,7 +157,7 @@ def generate_cenario_ev(units, output_path, penetration_pct):
                 f"kv={u['kv_ll']:.3f} "
                 f"kw={u['kw']:.2f} "
                 f"pf={u['power_factor']:.3f} "
-                f"model=1 daily={shape_name}\n"
+                f"model=1 status=exempt daily={shape_name}\n"
             )
 
 

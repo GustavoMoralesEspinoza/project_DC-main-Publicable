@@ -12,6 +12,7 @@
 #   "18Bus"      — IEEE 18-bus test feeder        (set TRANSFORMER_MVA = 7.2)
 #   "18Bus_Mod"  — Modified 18-bus test feeder    (set TRANSFORMER_MVA = 7.2)
 #   "CHS031"     — Real MV distribution feeder    (set TRANSFORMER_MVA = 60.0)
+#   "ITQ_D/RITQ1310" — Real MV feeder, subestacion ITQ (TRANSFORMER_MVA = 60.0). Ver RITQ1310_CONTEXTO.md
 # =============================================================================
 
 import os
@@ -26,7 +27,7 @@ import os
 ENABLE_PV    = True    # Photovoltaic generation (PVSystem elements in OpenDSS)
 ENABLE_BESS  = False   # Battery energy storage  (Storage elements in OpenDSS)
 ENABLE_EV_CS = False   # EV charging stations    (Load elements in OpenDSS)
-ENABLE_DC    = False   # Data centers            (Load elements in OpenDSS)
+ENABLE_DC    = True    # Data centers            (Load elements in OpenDSS)
 
 # =============================================================================
 # 2. NETWORK SELECTION
@@ -36,9 +37,11 @@ ENABLE_DC    = False   # Data centers            (Load elements in OpenDSS)
 #    it is used to compute per-unit transformer loading in results.
 # =============================================================================
 
-NETWORK_NAME    = "RBRR1303"                              # Options: "18Bus" | "18Bus_Mod" | "CHS031" | "RCSO1307" | "RBRR1303"
-NETWORK_FILE    = "DU_1_Master_391_BRR_RBRR1303.dss"      # Options: "master.dss" | "CHS031_Master.dss" | "DU_1_Master_391_CSO_RCSO1307.dss" | "DU_1_Master_391_BRR_RBRR1303.dss"
-TRANSFORMER_MVA = 5.25                                    # Options:  7.2 (18Bus/18Bus_Mod)  |  60.0 (CHS031)  |  15.0 (RCSO1307)  |  5.25 (RBRR1303 — 3×1750 kVA regulators)
+# NETWORK_NAME puede incluir una subcarpeta (p.ej. "ITQ_D/RITQ1310"); el nombre
+# del CSV de resultados usa solo la ultima parte ("RITQ1310").
+NETWORK_NAME    = "ITQ_D/RITQ1310"                        # Options: "18Bus" | "18Bus_Mod" | "CHS031" | "RCSO1307" | "RBRR1303" | "ITQ_D/RITQ1310"
+NETWORK_FILE    = "DU_1_Master_391_ITQ_RITQ1310.dss"      # Options: "master.dss" | "CHS031_Master.dss" | "DU_1_Master_391_CSO_RCSO1307.dss" | "DU_1_Master_391_BRR_RBRR1303.dss" | "DU_1_Master_391_ITQ_RITQ1310.dss"
+TRANSFORMER_MVA = 60.0                                    # Options:  7.2 (18Bus/18Bus_Mod)  |  60.0 (CHS031)  |  15.0 (RCSO1307)  |  5.25 (RBRR1303 — 3×1750 kVA regulators)  |  60.0 (RITQ1310 — trafo de la subestacion ITQ, compartido)
 
 # Scenario file naming mode:
 #   "replace" — single shared files (cenario_PV.dss, cenario_BESS.dss, ...)
@@ -74,6 +77,7 @@ IRRADIANCE_FILE   = os.path.join(BASE_DIR, "data", "irradiance", "Geracao_Solar.
 BESS_PROFILES_DIR = os.path.join(BASE_DIR, "data", "bess_profiles")
 EV_PROFILES_DIR   = os.path.join(BASE_DIR, "data", "ev_profiles")
 DC_PROFILES_DIR   = os.path.join(BASE_DIR, "data", "dc_profiles")
+DC_ARCHETYPES_DIR = os.path.join(DC_PROFILES_DIR, "archetypes")   # curvas del modelo gtd2027
 RESULTS_DIR       = os.path.join(BASE_DIR, "results")
 
 # =============================================================================
@@ -83,7 +87,8 @@ RESULTS_DIR       = os.path.join(BASE_DIR, "results")
 # Number of random iterations per penetration level.
 # Higher values give smoother statistical distributions but longer runtimes.
 # Recommended: 10 (quick test) | 30 (standard) | 100+ (publication quality)
-NUM_ITERATIONS = 5000
+# RITQ1310: 1000 por nivel (~4-5 h por caso con 16 workers). Subir tras revisar convergencia.
+NUM_ITERATIONS = 1000
 
 # Global random seed for full reproducibility across runs.
 # Set to None to use a different random draw every time.
@@ -117,6 +122,17 @@ ENABLE_ONLY_MT = True
 # An invalid value is passed through to OpenDSS as-is (no local validation).
 CONTROL_MODE = "off"
 
+# Multiplicador de las cargas propias de la red (comando "set loadmult" de OpenDSS).
+# Sirve para llevar una red poco cargada a un punto de operacion exigente pero
+# valido. Las cargas que agrega el framework (DC, estaciones EV) se escriben con
+# status=exempt y NO se escalan. Afecta tambien a E_base (y por eso al tamano de
+# PV y DC, que se dimensionan como fraccion de E_base).
+# Si es distinto de 1.0, el nombre del CSV de resultados lleva el sufijo _LMxxx.
+#   1.0  - cargas originales (DEFAULT). RITQ1310 Etapa A.
+#   1.40 - RITQ1310 Etapa B: mayor valor (paso 0.05) con el caso base dentro de
+#          limites (Vmin 0.961 pu, carga maxima de linea 97.9 % de normamps)
+LOAD_MULT = 1.0
+
 # OpenDSS "AllowForms" switch. When forms are allowed, OpenDSS can pop up modal
 # dialog / alert boxes (e.g. on solver warnings) that BLOCK execution until a
 # human clicks them — fatal for unattended batch runs of 10,000+ iterations.
@@ -134,7 +150,8 @@ ALLOW_FORMS = False
 #    Example with multiple exclusions: ["sourcebus", "bus1", "bus18"]
 # =============================================================================
 
-EXCLUDED_BUSES = ["MT8563317ID"]   # RBRR1303 source bus. Use ["busA"] for RCSO1307 | ["sourcebus"] for 18Bus/CHS031.
+# RITQ1310: busA (fuente) y MT8563902ID (salida del regulador de cabecera).
+EXCLUDED_BUSES = ["busA", "MT8563902ID"]   # Use ["MT8563317ID"] for RBRR1303 | ["busA"] for RCSO1307 | ["sourcebus"] for 18Bus/CHS031.
 
 # =============================================================================
 # 6. PENETRATION SWEEP  —  PV levels [% of daily network energy]
@@ -149,7 +166,9 @@ EXCLUDED_BUSES = ["MT8563317ID"]   # RBRR1303 source bus. Use ["busA"] for RCSO1
 #                       55, 60, 65, 70, 75, 80, 85, 90, 95, 100]
 # =============================================================================
 
-PENETRATION_LEVELS_PV = [20, 50, 70, 100]
+# RITQ1310 (LOAD_MULT 1.0): la sobretension aparece entre 150 % y 200 %;
+# se extiende a 240 % para cerrar la curva de probabilidad con DC.
+PENETRATION_LEVELS_PV = [0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240]
 # PENETRATION_LEVELS_PV = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
 
 # =============================================================================
@@ -178,13 +197,18 @@ DC_PV_RATIO   = 1.0    # DC penetration = PV level × 1.0
 #      PV_SIZES_KW = [30, 60, 120, 180, 240]
 #      PV_PROBS    = [0.25, 0.30, 0.25, 0.15, 0.05]
 #
-#    Utility / large commercial scale (current setting):
+#    Utility / large commercial scale (RBRR1303):
 #      PV_SIZES_KW = [1200, 1600, 2200, 2400, 3200]
 #      PV_PROBS    = [0.25, 0.30, 0.25, 0.15, 0.05]
+#
+#    MV minigeneracion (RITQ1310, current setting): 250 kW a 3 MW (tope de la
+#    minigeracao solar, Lei 14.300/2022), ordenado de menor a mayor; las
+#    unidades chicas son mas frecuentes. Media ~1.1 MW, para que 20 % de PV
+#    (~4 MW en RITQ1310) ya tenga varias unidades. Ver RITQ1310_CONTEXTO.md
 # =============================================================================
 
-PV_SIZES_KW     = [1200, 1600, 2200, 2400, 3200]
-PV_PROBS        = [0.25, 0.30, 0.25, 0.15, 0.05]
+PV_SIZES_KW     = [250,  500,  1000, 1500, 2000, 3000]
+PV_PROBS        = [0.15, 0.25, 0.25, 0.15, 0.12, 0.08]
 PV_POWER_FACTOR = 1.0
 
 # =============================================================================
@@ -258,6 +282,7 @@ EV_ELIGIBLE_BUSES = []   # Example: ["bus5", "bus9", "bus14"] or [] for all MV b
 #     DC_SELF_SUPPLY_FRAC: fraction of DC energy covered by on-site generation
 # =============================================================================
 
+# --- Legacy (SYSCON): usado solo si DC_MODEL = "legacy" ---
 NUM_DC              = 1
 DC_PUE_RANGE        = (1.2, 1.8)   # Options: (1.2, 1.5) lean DCs | (1.5, 2.0) older DCs
 DC_NOISE_BAND       = 0.05         # ±5% hourly variability around the workload profile
@@ -265,6 +290,59 @@ DC_POWER_FACTOR     = 0.95
 
 ENABLE_DC_GEN       = False        # Set True to add a BTM generator per DC
 DC_SELF_SUPPLY_FRAC = 0.20         # Fraction of DC energy supplied on-site (only if ENABLE_DC_GEN)
+
+# --- Modelo DC GT&D 2027 ---
+# Potencia maxima de diseno fija y energia diaria variable segun el mes y la
+# temperatura ambiente (documento DC_03, seccion 4).
+# Entre parentesis se indica el simbolo usado en el paper.
+#
+#   "gtd2027" : modelo nuevo (este bloque)
+#   "legacy"  : modelo SYSCON (bloque anterior: PUE, normalizacion diaria, CSVs)
+DC_MODEL = "gtd2027"
+
+# Escenario de la corrida. En la Fase 1 se corre un escenario por vez, cambiandolo a mano:
+#   C0     -> ENABLE_DC = False
+#   C1-inf -> DC_ENERGY_SHARE = 0.25, DC_ARCHETYPE = "inference"
+#   C1-tr  -> DC_ENERGY_SHARE = 0.25, DC_ARCHETYPE = "training"
+#   C2-inf -> DC_ENERGY_SHARE = 0.50, DC_ARCHETYPE = "inference"
+#   C2-tr  -> DC_ENERGY_SHARE = 0.50, DC_ARCHETYPE = "training"
+
+# (rho_DC, ρ) Fraccion de la energia diaria base de la red que consume el DC,
+# en promedio anual. 0.25 = 25 %. Es fija en todo el barrido de penetracion PV.
+DC_ENERGY_SHARE = 0.25
+
+# (k) Tipo de carga de trabajo del DC. Es el nombre de un archivo
+# data/dc_profiles/archetypes/<nombre>.csv (columnas Hora, Utilizacion):
+#   "inference" : servicio a usuarios, sigue el ciclo diario (Zhang, IET)
+#   "training"  : entrenamiento de modelos, carga casi constante todo el dia
+# Para agregar un arquetipo nuevo basta con copiar su CSV en esa carpeta.
+DC_ARCHETYPE = "inference"
+
+# (phi, φ) Fraccion de la potencia que el DC consume siempre (servidores en
+# reposo, red interna, iluminacion), aunque no haya carga de trabajo.
+# Se sortea uniforme entre (minimo, maximo) en cada iteracion.
+DC_BASE_LOAD_FRACTION_RANGE = (0.20, 0.35)
+
+# (FP) Factor de potencia de la carga del DC.
+# Se sortea uniforme entre (minimo, maximo) en cada iteracion.
+DC_POWER_FACTOR_RANGE = (0.95, 0.99)
+
+# (beta, β) Sensibilidad del consumo a la temperatura ambiente: aumento relativo
+# por cada grado Celsius por encima del umbral. 0.015 = 1.5 % por grado.
+DC_TEMP_SENSITIVITY = 0.015
+
+# (T0) Temperatura ambiente, en grados Celsius, a partir de la cual el consumo
+# de refrigeracion empieza a crecer.
+DC_TEMP_THRESHOLD_C = 18.0
+
+# (delta, δ) Variacion aleatoria horaria de la carga de trabajo: cada hora se
+# multiplica por un factor entre (1 - valor) y (1 + valor). 0.05 = +/- 5 %.
+DC_HOURLY_NOISE = 0.05
+
+# Archivo de temperaturas del DC. Se carga de forma independiente del modulo PV.
+# Columnas requeridas: Mes (1-12), Hora (0-23), T2m_mean (temperatura ambiente
+# a 2 metros, en grados Celsius). Si hay varias filas por (Mes, Hora) se promedian.
+DC_TEMPERATURE_FILE = os.path.join(BASE_DIR, "data", "irradiance", "Geracao_Solar.csv")
 
 # =============================================================================
 # 12. ECONOMIC COSTS
@@ -313,11 +391,20 @@ PLOT_BAND_UPPER = 90   # Upper percentile for confidence band in plots (e.g. 90 
 
 HOURLY_DIR = os.path.join(RESULTS_DIR, "hourly")
 
+# Sufijo del multiplicador de carga (vacio si LOAD_MULT = 1.0): p.ej. _LM140
+_lm_tag = "" if LOAD_MULT == 1.0 else f"_LM{int(round(LOAD_MULT * 100))}"
+
 _max_pv   = max(PENETRATION_LEVELS_PV) if ENABLE_PV   else 0
 _max_bess = round(_max_pv * BESS_PV_RATIO) if ENABLE_BESS  else 0
 _max_ev   = round(_max_pv * EV_PV_RATIO)   if ENABLE_EV_CS else 0
-_max_dc   = round(_max_pv * DC_PV_RATIO)   if ENABLE_DC    else 0
+if not ENABLE_DC:
+    _dc_tag = "DC0"
+elif DC_MODEL == "gtd2027":
+    # p.ej. DC25inference, DC50training (nombre completo: evita choques entre arquetipos)
+    _dc_tag = f"DC{int(round(DC_ENERGY_SHARE * 100))}{DC_ARCHETYPE}"
+else:
+    _dc_tag = f"DC{round(_max_pv * DC_PV_RATIO)}"     # legacy, igual que hoy
 RESULTS_FILE = os.path.join(
     RESULTS_DIR,
-    f"results_{NETWORK_NAME}_PV{_max_pv}_BESS{_max_bess}_EV{_max_ev}_DC{_max_dc}.csv"
+    f"results_{os.path.basename(NETWORK_NAME)}_PV{_max_pv}_BESS{_max_bess}_EV{_max_ev}_{_dc_tag}{_lm_tag}.csv"
 )

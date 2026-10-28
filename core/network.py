@@ -9,7 +9,7 @@ import py_dss_interface
 
 
 def run_base_case(dss_file, transformer_mva, only_three_phase=True, excluded_buses=None,
-                  control_mode="off", allow_forms=False, only_mt=True):
+                  control_mode="off", allow_forms=False, only_mt=True, load_mult=1.0):
     """
     Compila la red y corre simulación diaria de 24 horas sin DERs.
 
@@ -45,6 +45,8 @@ def run_base_case(dss_file, transformer_mva, only_three_phase=True, excluded_bus
     dss.dssinterface.allow_forms = 1 if allow_forms else 0
     dss.text(f"compile [{dss_file}]")
     dss.text(f"set controlmode={control_mode}")
+    # Escala las cargas de la red (las del DC y EV se escriben con status=exempt)
+    dss.text(f"set loadmult={load_mult}")
 
     # --- Identificar barras MT candidatas ---
     mt_buses, mt_kv, mt_phases = _get_mt_buses(dss, only_three_phase, excluded_buses)
@@ -125,7 +127,7 @@ def run_with_ders(dss_file, transformer_mva,
                   enable_ev=False, path_ev=None,
                   enable_dc=False, path_dc=None,
                   n_mt_total=1, control_mode="off", allow_forms=False,
-                  only_mt=True, only_three_phase=True):
+                  only_mt=True, only_three_phase=True, load_mult=1.0):
     """
     Compila la red y carga los DERs activos con redirect explícito.
     Solo hace redirect a los archivos de los módulos habilitados.
@@ -158,6 +160,8 @@ def run_with_ders(dss_file, transformer_mva,
         dss.text(f"redirect [{path_ev}]")
     if enable_dc and path_dc:
         dss.text(f"redirect [{path_dc}]")
+    # Escala las cargas de la red (las del DC y EV se escriben con status=exempt)
+    dss.text(f"set loadmult={load_mult}")
 
     kva_base = transformer_mva * 1000.0
 

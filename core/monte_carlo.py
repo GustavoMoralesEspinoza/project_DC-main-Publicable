@@ -113,6 +113,15 @@ def _print_elapsed(t_start, total):
           f"  |  {per_it:.3f} s/iter over {total} iterations)")
 
 
+def _dc_pen(cfg, level):
+    """pen_DC en % para el CSV. gtd2027: fijo = DC_ENERGY_SHARE*100; legacy: level*DC_PV_RATIO."""
+    if not cfg.ENABLE_DC:
+        return 0
+    if getattr(cfg, "DC_MODEL", "legacy") == "gtd2027":
+        return round(cfg.DC_ENERGY_SHARE * 100.0, 4)
+    return round(level * cfg.DC_PV_RATIO, 4)
+
+
 # =============================================================================
 # Parallel worker
 # =============================================================================
@@ -171,12 +180,14 @@ def _run_single_iteration(task):
 
     # --- PV ---
     pv_units = []
+    month_idx = None   # mes sorteado por el PV (0-11); el DC lo reutiliza
     if cfg_ns.ENABLE_PV:
         from modules.pv.pv_profiles  import sample_monthly_profile
         from modules.pv.pv_allocation import allocate_pv, generate_cenario_pv
         irr_matrix  = _worker_data["irr_matrix"]
         temp_matrix = _worker_data["temp_matrix"]
         irrad_pu, temp_c, psh, mes = sample_monthly_profile(irr_matrix, temp_matrix)
+        month_idx = mes - 1
         pv_units, _ = allocate_pv(
             energy, pen_pv, psh,
             mt_buses, mt_kv, mt_phases,
@@ -223,23 +234,41 @@ def _run_single_iteration(task):
     # --- DC ---
     dc_units = []
     if cfg_ns.ENABLE_DC:
-        from modules.dc.dc_allocation import allocate_dc, generate_cenario_dc
-        dc_profiles      = _worker_data["dc_profiles"]
-        dc_profile_names = _worker_data["dc_profile_names"]
-        dc_gen_profile   = _worker_data.get("dc_gen_profile")
-        dc_units, _ = allocate_dc(
-            energy, pen_dc,
-            mt_buses, mt_kv, mt_phases,
-            cfg_ns.NUM_DC, dc_profiles, dc_profile_names,
-            cfg_ns.DC_PUE_RANGE, cfg_ns.DC_NOISE_BAND,
-            excluded_buses=cfg_ns.EXCLUDED_BUSES,
-        )
-        generate_cenario_dc(
-            dc_units, path_dc, pen_dc,
-            enable_dc_gen=cfg_ns.ENABLE_DC_GEN,
-            dc_self_supply_frac=cfg_ns.DC_SELF_SUPPLY_FRAC,
-            dc_gen_profile=dc_gen_profile,
-        )
+        if getattr(cfg_ns, "DC_MODEL", "legacy") == "gtd2027":
+            from modules.dc.dc_allocation import allocate_dc_gtd, generate_cenario_dc_gtd
+            dc_rng = _np.random.default_rng(seed_it) if seed_it != 0 else _np.random.default_rng()
+            dc_unit = allocate_dc_gtd(
+                energy, cfg_ns.DC_ENERGY_SHARE, cfg_ns.DC_ARCHETYPE, _worker_data["dc_workload"],
+                mt_buses, mt_kv, mt_phases,
+                _worker_data["dc_temp_matrix"], dc_rng,
+                month_idx=month_idx,
+                base_load_frac_range=cfg_ns.DC_BASE_LOAD_FRACTION_RANGE,
+                power_factor_range=cfg_ns.DC_POWER_FACTOR_RANGE,
+                temp_sensitivity=cfg_ns.DC_TEMP_SENSITIVITY,
+                temp_threshold_c=cfg_ns.DC_TEMP_THRESHOLD_C,
+                hourly_noise=cfg_ns.DC_HOURLY_NOISE,
+                excluded_buses=cfg_ns.EXCLUDED_BUSES,
+            )
+            dc_units = [dc_unit] if dc_unit else []
+            generate_cenario_dc_gtd(dc_unit, path_dc)
+        else:
+            from modules.dc.dc_allocation import allocate_dc, generate_cenario_dc
+            dc_profiles      = _worker_data["dc_profiles"]
+            dc_profile_names = _worker_data["dc_profile_names"]
+            dc_gen_profile   = _worker_data.get("dc_gen_profile")
+            dc_units, _ = allocate_dc(
+                energy, pen_dc,
+                mt_buses, mt_kv, mt_phases,
+                cfg_ns.NUM_DC, dc_profiles, dc_profile_names,
+                cfg_ns.DC_PUE_RANGE, cfg_ns.DC_NOISE_BAND,
+                excluded_buses=cfg_ns.EXCLUDED_BUSES,
+            )
+            generate_cenario_dc(
+                dc_units, path_dc, pen_dc,
+                enable_dc_gen=cfg_ns.ENABLE_DC_GEN,
+                dc_self_supply_frac=cfg_ns.DC_SELF_SUPPLY_FRAC,
+                dc_gen_profile=dc_gen_profile,
+            )
 
     # --- Simulate ---
     sim = run_with_ders(
@@ -251,6 +280,7 @@ def _run_single_iteration(task):
         n_mt_total=n_mt_total,
         control_mode=getattr(cfg_ns, "CONTROL_MODE", "off"),
         allow_forms=getattr(cfg_ns, "ALLOW_FORMS", False),
+        load_mult=getattr(cfg_ns, "LOAD_MULT", 1.0),
         only_mt=getattr(cfg_ns, "ENABLE_ONLY_MT", True),
         only_three_phase=getattr(cfg_ns, "ONLY_THREE_PHASE", True),
     )
@@ -259,7 +289,8 @@ def _run_single_iteration(task):
     pv_kw_inst    = sum(u["pmpp_kw"]   for u in pv_units)
     bess_kwh_inst = sum(u["kwh_rated"] for u in bess_units)
     ev_kw_inst    = sum(u["kw"]        for u in ev_units)
-    dc_kw_inst    = sum(u["peak_kw"]   for u in dc_units)
+    # gtd2027: capacidad instalada (potencia maxima de diseno); legacy: pico del perfil (sin cambio)
+    dc_kw_inst    = sum(u.get("design_max_kw", u["peak_kw"]) for u in dc_units)
     energy_losses_kwh = float(_np.sum(sim["perfil_losses"]))
 
     costs = {
@@ -357,14 +388,23 @@ def run_monte_carlo(cfg):
         print(f"  EV profiles loaded: {ev_profile_names}")
 
     dc_profiles = dc_profile_names = dc_gen_profile = None
+    dc_temp_matrix = dc_workload = None
     if cfg.ENABLE_DC:
-        from modules.dc.dc_profiles   import load_dc_profiles, load_dc_gen_profile
-        from modules.dc.dc_allocation import allocate_dc, generate_cenario_dc
-        dc_profiles, dc_profile_names = load_dc_profiles(cfg.DC_PROFILES_DIR)
-        print(f"  DC profiles loaded: {dc_profile_names}")
-        if cfg.ENABLE_DC_GEN:
-            dc_gen_profile, dc_gen_name = load_dc_gen_profile(cfg.DC_PROFILES_DIR)
-            print(f"  DC generator profile: {dc_gen_name}")
+        if getattr(cfg, "DC_MODEL", "legacy") == "gtd2027":
+            from modules.dc.dc_profiles   import load_dc_temperature_matrix, get_workload_profile
+            from modules.dc.dc_allocation import allocate_dc_gtd, generate_cenario_dc_gtd
+            dc_workload    = get_workload_profile(cfg.DC_ARCHETYPE, cfg.DC_ARCHETYPES_DIR)
+            dc_temp_matrix = load_dc_temperature_matrix(cfg.DC_TEMPERATURE_FILE)
+            print(f"  DC model: gtd2027  energy_share={cfg.DC_ENERGY_SHARE}  "
+                  f"archetype={cfg.DC_ARCHETYPE}")
+        else:
+            from modules.dc.dc_profiles   import load_dc_profiles, load_dc_gen_profile
+            from modules.dc.dc_allocation import allocate_dc, generate_cenario_dc
+            dc_profiles, dc_profile_names = load_dc_profiles(cfg.DC_PROFILES_DIR)
+            print(f"  DC profiles loaded: {dc_profile_names}")
+            if cfg.ENABLE_DC_GEN:
+                dc_gen_profile, dc_gen_name = load_dc_gen_profile(cfg.DC_PROFILES_DIR)
+                print(f"  DC generator profile: {dc_gen_name}")
 
     # --- Cenarios directory setup ---
     cenarios_dir = cfg.CENARIOS_DIR
@@ -439,6 +479,7 @@ def run_monte_carlo(cfg):
             cfg.ONLY_THREE_PHASE, excluded_buses=cfg.EXCLUDED_BUSES,
             control_mode=getattr(cfg, "CONTROL_MODE", "off"),
             allow_forms=getattr(cfg, "ALLOW_FORMS", False),
+            load_mult=getattr(cfg, "LOAD_MULT", 1.0),
             only_mt=getattr(cfg, "ENABLE_ONLY_MT", True),
         )
 
@@ -449,7 +490,7 @@ def run_monte_carlo(cfg):
             pen_pv   = level                               if cfg.ENABLE_PV    else 0
             pen_bess = round(level * cfg.BESS_PV_RATIO, 4) if cfg.ENABLE_BESS  else 0
             pen_ev   = round(level * cfg.EV_PV_RATIO,   4) if cfg.ENABLE_EV_CS else 0
-            pen_dc   = round(level * cfg.DC_PV_RATIO,   4) if cfg.ENABLE_DC    else 0
+            pen_dc   = _dc_pen(cfg, level)
             for _ in range(cfg.NUM_ITERATIONS):
                 count += 1
                 seed_it = (cfg.RANDOM_SEED + count) if cfg.RANDOM_SEED is not None else 0
@@ -473,6 +514,8 @@ def run_monte_carlo(cfg):
             dc_profiles=dc_profiles,
             dc_profile_names=dc_profile_names,
             dc_gen_profile=dc_gen_profile,
+            dc_temp_matrix=dc_temp_matrix,
+            dc_workload=dc_workload,
         )
 
         n_workers = getattr(cfg, "NUM_WORKERS", None) or _mp.cpu_count()
@@ -516,7 +559,7 @@ def run_monte_carlo(cfg):
         pen_pv   = level                               if cfg.ENABLE_PV    else 0
         pen_bess = round(level * cfg.BESS_PV_RATIO, 4) if cfg.ENABLE_BESS  else 0
         pen_ev   = round(level * cfg.EV_PV_RATIO,   4) if cfg.ENABLE_EV_CS else 0
-        pen_dc   = round(level * cfg.DC_PV_RATIO,   4) if cfg.ENABLE_DC    else 0
+        pen_dc   = _dc_pen(cfg, level)
 
         for it in range(cfg.NUM_ITERATIONS):
             count += 1
@@ -548,6 +591,7 @@ def run_monte_carlo(cfg):
                 cfg.ONLY_THREE_PHASE, excluded_buses=cfg.EXCLUDED_BUSES,
                 control_mode=getattr(cfg, "CONTROL_MODE", "off"),
                 allow_forms=getattr(cfg, "ALLOW_FORMS", False),
+                load_mult=getattr(cfg, "LOAD_MULT", 1.0),
                 only_mt=getattr(cfg, "ENABLE_ONLY_MT", True),
             )
             mt_buses   = base["mt_buses"]
@@ -558,8 +602,10 @@ def run_monte_carlo(cfg):
 
             # --- PV ---
             pv_units = []
+            month_idx = None   # mes sorteado por el PV (0-11); el DC lo reutiliza
             if cfg.ENABLE_PV:
                 irrad_pu, temp_c, psh, mes = sample_monthly_profile(irr_matrix, temp_matrix)
+                month_idx = mes - 1
                 pv_units, _ = allocate_pv(
                     energy, pen_pv, psh,
                     mt_buses, mt_kv, mt_phases,
@@ -598,19 +644,36 @@ def run_monte_carlo(cfg):
             # --- DC ---
             dc_units = []
             if cfg.ENABLE_DC:
-                dc_units, _ = allocate_dc(
-                    energy, pen_dc,
-                    mt_buses, mt_kv, mt_phases,
-                    cfg.NUM_DC, dc_profiles, dc_profile_names,
-                    cfg.DC_PUE_RANGE, cfg.DC_NOISE_BAND,
-                    excluded_buses=cfg.EXCLUDED_BUSES,
-                )
-                generate_cenario_dc(
-                    dc_units, path_dc, pen_dc,
-                    enable_dc_gen=cfg.ENABLE_DC_GEN,
-                    dc_self_supply_frac=cfg.DC_SELF_SUPPLY_FRAC,
-                    dc_gen_profile=dc_gen_profile,
-                )
+                if getattr(cfg, "DC_MODEL", "legacy") == "gtd2027":
+                    dc_rng = np.random.default_rng(seed_it) if seed_it != 0 else np.random.default_rng()
+                    dc_unit = allocate_dc_gtd(
+                        energy, cfg.DC_ENERGY_SHARE, cfg.DC_ARCHETYPE, dc_workload,
+                        mt_buses, mt_kv, mt_phases,
+                        dc_temp_matrix, dc_rng,
+                        month_idx=month_idx,
+                        base_load_frac_range=cfg.DC_BASE_LOAD_FRACTION_RANGE,
+                        power_factor_range=cfg.DC_POWER_FACTOR_RANGE,
+                        temp_sensitivity=cfg.DC_TEMP_SENSITIVITY,
+                        temp_threshold_c=cfg.DC_TEMP_THRESHOLD_C,
+                        hourly_noise=cfg.DC_HOURLY_NOISE,
+                        excluded_buses=cfg.EXCLUDED_BUSES,
+                    )
+                    dc_units = [dc_unit] if dc_unit else []
+                    generate_cenario_dc_gtd(dc_unit, path_dc)
+                else:
+                    dc_units, _ = allocate_dc(
+                        energy, pen_dc,
+                        mt_buses, mt_kv, mt_phases,
+                        cfg.NUM_DC, dc_profiles, dc_profile_names,
+                        cfg.DC_PUE_RANGE, cfg.DC_NOISE_BAND,
+                        excluded_buses=cfg.EXCLUDED_BUSES,
+                    )
+                    generate_cenario_dc(
+                        dc_units, path_dc, pen_dc,
+                        enable_dc_gen=cfg.ENABLE_DC_GEN,
+                        dc_self_supply_frac=cfg.DC_SELF_SUPPLY_FRAC,
+                        dc_gen_profile=dc_gen_profile,
+                    )
 
             # --- Simulate ---
             sim = run_with_ders(
@@ -622,6 +685,7 @@ def run_monte_carlo(cfg):
                 n_mt_total=n_mt_total,
                 control_mode=getattr(cfg, "CONTROL_MODE", "off"),
                 allow_forms=getattr(cfg, "ALLOW_FORMS", False),
+                load_mult=getattr(cfg, "LOAD_MULT", 1.0),
                 only_mt=getattr(cfg, "ENABLE_ONLY_MT", True),
                 only_three_phase=getattr(cfg, "ONLY_THREE_PHASE", True),
             )
@@ -630,7 +694,8 @@ def run_monte_carlo(cfg):
             pv_kw_inst    = sum(u["pmpp_kw"]   for u in pv_units)
             bess_kwh_inst = sum(u["kwh_rated"] for u in bess_units)
             ev_kw_inst    = sum(u["kw"]        for u in ev_units)
-            dc_kw_inst    = sum(u["peak_kw"]   for u in dc_units)
+            # gtd2027: capacidad instalada (potencia maxima de diseno); legacy: pico del perfil (sin cambio)
+            dc_kw_inst    = sum(u.get("design_max_kw", u["peak_kw"]) for u in dc_units)
             energy_losses_kwh = float(np.sum(sim["perfil_losses"]))
 
             costs = {

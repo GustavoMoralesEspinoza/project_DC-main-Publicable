@@ -83,6 +83,7 @@ base = run_base_case(
     excluded_buses=cfg.EXCLUDED_BUSES,
     control_mode=getattr(cfg, "CONTROL_MODE", "off"),
     allow_forms=getattr(cfg, "ALLOW_FORMS", False),
+    load_mult=getattr(cfg, "LOAD_MULT", 1.0),
     only_mt=getattr(cfg, "ENABLE_ONLY_MT", True),
 )
 mt_buses   = base["mt_buses"]
@@ -156,7 +157,30 @@ if ENABLE_EV_CS and PEN_EV > 0:
 # --- DC ---
 dc_units   = []
 e_total_dc = 0.0
-if ENABLE_DC and PEN_DC > 0:
+if ENABLE_DC and PEN_DC > 0 and getattr(cfg, "DC_MODEL", "legacy") == "gtd2027":
+    from modules.dc.dc_profiles   import load_dc_temperature_matrix, get_workload_profile
+    from modules.dc.dc_allocation import allocate_dc_gtd, generate_cenario_dc_gtd
+
+    dc_temp_matrix = load_dc_temperature_matrix(cfg.DC_TEMPERATURE_FILE)
+    dc_rng   = np.random.default_rng(SEED) if SEED is not None else np.random.default_rng()
+    pv_month = (month - 1) if (ENABLE_PV and PEN_PV > 0) else None
+    dc_unit = allocate_dc_gtd(
+        energy, PEN_DC / 100.0, cfg.DC_ARCHETYPE,
+        get_workload_profile(cfg.DC_ARCHETYPE, cfg.DC_ARCHETYPES_DIR),
+        mt_buses, mt_kv, mt_phases,
+        dc_temp_matrix, dc_rng, month_idx=pv_month,
+        base_load_frac_range=cfg.DC_BASE_LOAD_FRACTION_RANGE,
+        power_factor_range=cfg.DC_POWER_FACTOR_RANGE,
+        temp_sensitivity=cfg.DC_TEMP_SENSITIVITY,
+        temp_threshold_c=cfg.DC_TEMP_THRESHOLD_C,
+        hourly_noise=cfg.DC_HOURLY_NOISE,
+        excluded_buses=cfg.EXCLUDED_BUSES,
+    )
+    dc_units   = [dc_unit] if dc_unit else []
+    e_total_dc = dc_unit["day_energy_kwh"] if dc_unit else 0.0
+    generate_cenario_dc_gtd(dc_unit, path_dc)
+
+elif ENABLE_DC and PEN_DC > 0:
     from modules.dc.dc_profiles   import load_dc_profiles, load_dc_gen_profile
     from modules.dc.dc_allocation import allocate_dc, generate_cenario_dc
 
@@ -193,6 +217,7 @@ sim = run_with_ders(
     n_mt_total=n_mt_total,
     control_mode=getattr(cfg, "CONTROL_MODE", "off"),
     allow_forms=getattr(cfg, "ALLOW_FORMS", False),
+    load_mult=getattr(cfg, "LOAD_MULT", 1.0),
     only_mt=getattr(cfg, "ENABLE_ONLY_MT", True),
     only_three_phase=getattr(cfg, "ONLY_THREE_PHASE", True),
 )
@@ -232,7 +257,21 @@ if ENABLE_EV_CS and ev_units:
     print(f"    Stations installed    : {len(ev_units):>10}")
     print(f"    Total power           : {sum(u['kw'] for u in ev_units):>10,.1f} kW")
 
-if ENABLE_DC and dc_units:
+if ENABLE_DC and dc_units and "design_max_kw" in dc_units[0]:
+    u = dc_units[0]
+    month_src = "PV" if u["month_from_pv"] else "own draw"
+    print(f"\n  Data Center  ({PEN_DC}%  |  model gtd2027)")
+    print(f"    Archetype             : {u['archetype']}")
+    print(f"    Bus                   : {u['bus']}")
+    print(f"    Base load fraction    : {u['base_load_frac']:>10.4f}")
+    print(f"    Power factor          : {u['power_factor']:>10.4f}")
+    print(f"    Month                 : {u['month']:>10}   ({month_src})")
+    print(f"    Design max power      : {u['design_max_kw']:>10,.1f} kW")
+    print(f"    Day peak power        : {u['peak_kw']:>10,.1f} kW")
+    print(f"    Peak / design max     : {u['peak_ratio']:>10.4f}")
+    print(f"    Day energy            : {e_total_dc:>10,.1f} kWh")
+
+elif ENABLE_DC and dc_units:
     avg_pue  = sum(u["pue"] for u in dc_units) / len(dc_units)
     tot_peak = sum(u["peak_kw"] for u in dc_units)
     archetypes = ", ".join(dict.fromkeys(u["profile_name"] for u in dc_units))
